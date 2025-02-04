@@ -6,13 +6,13 @@
 Clone the repository
 
 ```js
-git clone https://github.com/mercurjs/mercur-storefront.git
+git clone https://github.com/mercurjs/b2c-marketplace-storefront.git
 ```
 &nbsp;
 
 Go to directory
 ```js
-cd mercur-storefront
+cd b2c-marketplace-storefront
 ```
 &nbsp;
 
