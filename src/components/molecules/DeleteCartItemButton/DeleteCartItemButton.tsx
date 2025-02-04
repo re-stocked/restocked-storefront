@@ -14,7 +14,7 @@ export const DeleteCartItemButton = ({
 
   const handleDelete = async (id: string) => {
     setIsDeleting(true);
-    await deleteLineItem(id).catch((err) => {
+    await deleteLineItem(id).catch(() => {
       setIsDeleting(false);
     });
   };
