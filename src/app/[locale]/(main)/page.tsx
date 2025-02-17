@@ -12,12 +12,30 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Home',
+  description:
+    'Welcome to Mercur B2C Demo! Create a modern marketplace that you own and customize in every aspect with high-performance, fully customizable storefront.',
+  openGraph: {
+    title: 'Mercur B2C Demo - Marketplace Storefront',
+    description:
+      'Welcome to Mercur B2C Demo! Create a modern marketplace that you own and customize in every aspect with high-performance, fully customizable storefront.',
+    url: process.env.NEXT_PUBLIC_BASE_URL,
+    siteName: 'Mercur B2C Demo - Marketplace Storefront',
+    type: 'website',
+    images: [
+      {
+        url: '/B2C_Storefront_Open_Graph.png',
+        width: 1200,
+        height: 630,
+        alt: 'Mercur B2C Demo - Marketplace Storefront',
+      },
+    ],
+  },
 };
 
 export default async function Home({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
 
