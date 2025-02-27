@@ -73,10 +73,6 @@ export const ProductDetailsHeader = ({
     setIsAdding(false)
   }
 
-  const variantStock =
-    product.variants?.find(({ id }) => id === variantId)
-      ?.inventory_quantity || 0;
-
   return (
     <div className="border rounded-sm p-5">
       <div className="flex justify-between">

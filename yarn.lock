@@ -1836,7 +1836,6 @@
     "@storybook/preset-react-webpack" "8.6.0"
     "@storybook/react" "8.6.0"
     "@storybook/test" "8.6.0"
-
     "@types/semver" "^7.3.4"
     babel-loader "^9.1.3"
     css-loader "^6.7.3"
@@ -4093,7 +4092,6 @@ fast-uri@^3.0.1:
   integrity sha512-Atfo14OibSv5wAp4VWNsFYE1AchQRTv9cBGWET4pZWHzYshFSS9NQI6I57rdKn9croWVMbYFbLhJ+yJvmZIIHw==
 
 fastq@^1.6.0:
-
   version "1.19.1"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.19.1.tgz#d50eaba803c8846a883c16492821ebcd2cda55f5"
   integrity sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==
@@ -4101,7 +4099,6 @@ fastq@^1.6.0:
     reusify "^1.0.4"
 
 fdir@^6.4.3:
-
   version "6.4.3"
   resolved "https://registry.yarnpkg.com/fdir/-/fdir-6.4.3.tgz#011cdacf837eca9b811c89dbb902df714273db72"
   integrity sha512-PMXmW2y1hDDfTSRc9gaXIuCCRpuoz3Kaz8cUelp3smouvfT632ozg2vrT6lJsHKKOF59YLbOGfAWGUcKEfRMQw==
@@ -4194,11 +4191,9 @@ flat-cache@^4.0.0:
     keyv "^4.5.4"
 
 flatted@^3.2.9:
-
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.3.tgz#67c8fad95454a7c7abebf74bb78ee74a44023358"
   integrity sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==
-
 
 for-each@^0.3.3:
   version "0.3.5"
@@ -4208,13 +4203,11 @@ for-each@^0.3.3:
     is-callable "^1.2.7"
 
 foreground-child@^3.1.0:
-
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-3.3.1.tgz#32e8e9ed1b68a3497befb9ac2b6adf92a638576f"
   integrity sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==
   dependencies:
     cross-spawn "^7.0.6"
-
     signal-exit "^4.0.1"
 
 fork-ts-checker-webpack-plugin@^8.0.0:
@@ -5841,7 +5834,6 @@ postcss@^8, postcss@^8.2.14, postcss@^8.4.33, postcss@^8.4.38, postcss@^8.4.47:
   version "8.5.3"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.3.tgz#1463b6f1c7fb16fe258736cba29a2de35237eafb"
   integrity sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==
-
   dependencies:
     nanoid "^3.3.8"
     picocolors "^1.1.1"
@@ -5968,7 +5960,6 @@ react-confetti@^6.1.0:
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/react-confetti/-/react-confetti-6.2.3.tgz#817b5e53458cccfaca22241d195b4a93f21fadf1"
   integrity sha512-Jt6Fy3jE7FrpKxeDQ3oh36Bz6LoYt4o+vU578ghuF//NxADlcauDYvWr24S8hHKnQ90Uv01XXOngnKVBdZ73zQ==
-
   dependencies:
     tween-functions "^1.2.0"
 
@@ -6259,7 +6250,6 @@ reusify@^1.0.4:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.1.0.tgz#0fe13b9522e1473f51b558ee796e08f11f9b489f"
   integrity sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==
-
 
 rimraf@^3.0.2:
   version "3.0.2"
@@ -6859,7 +6849,6 @@ tinyglobby@^0.2.12:
   integrity sha512-qkf4trmKSIiMTs/E63cxH+ojC2unam7rJ0WrauAzpT3ECNTxGRMlaXxVbfxMUC/w0LaYk6jQ4y/nGR9uBO3tww==
   dependencies:
     fdir "^6.4.3"
-
     picomatch "^4.0.2"
 
 tinyrainbow@^1.2.0:
@@ -7084,12 +7073,10 @@ url@^0.11.0:
     punycode "^1.4.1"
     qs "^6.12.3"
 
-
 use-intl@^3.26.5:
   version "3.26.5"
   resolved "https://registry.yarnpkg.com/use-intl/-/use-intl-3.26.5.tgz#25ceda122ba1e4cee6d55d674a20a71cc0ab2559"
   integrity sha512-OdsJnC/znPvHCHLQH/duvQNXnP1w0hPfS+tkSi3mAbfjYBGh4JnyfdwkQBfIVf7t8gs9eSX/CntxUMvtKdG2MQ==
-
   dependencies:
     "@formatjs/fast-memoize" "^2.2.0"
     intl-messageformat "^10.5.14"
