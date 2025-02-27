@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils"
-import Image from "next/image"
-import { ProfileIcon } from "@/icons"
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { ProfileIcon } from '@/icons';
 
 interface AvatarProps {
   src?: string
