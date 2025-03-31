@@ -2,14 +2,14 @@ import { SellerTabs } from "@/components/organisms"
 import { SellerPageHeader } from "@/components/sections"
 import { getSellerByHandle } from "@/lib/data/seller"
 
-export default function SellerPage({
+export default async function SellerPage({
   params,
   searchParams,
 }: {
-  params: { params: string[] }
+  params: { params: Promise<string[]> }
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  const urlParams = params?.params ?? []
+  const urlParams = (await params?.params) ?? []
   const sellerHandle = urlParams[0]
 
   if (!sellerHandle) {

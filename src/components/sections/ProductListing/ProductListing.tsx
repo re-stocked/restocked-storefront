@@ -13,9 +13,9 @@ export const ProductListing = async ({
   searchParams,
   category_id,
 }: {
-  searchParams: {
+  searchParams: Promise<{
     [key: string]: string | string[] | undefined
-  }
+  }>
   category_id?: string
 }) => {
   const { sortBy, page } = await searchParams

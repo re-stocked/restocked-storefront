@@ -9,9 +9,9 @@ export const SellerTabs = ({
   tab,
   seller,
 }: {
-  searchParams: {
+  searchParams: Promise<{
     [key: string]: string | string[] | undefined
-  }
+  }>
   tab: string
   seller: string
 }) => {
