@@ -6,10 +6,8 @@ export default function SellerPage({
   params,
   searchParams,
 }: {
-  params: { params?: string[] }
-  searchParams: {
-    [key: string]: string | string[] | undefined
-  }
+  params: { params: string[] }
+  searchParams: { [key: string]: string | string[] | undefined }
 }) {
   const urlParams = params?.params ?? []
   const sellerHandle = urlParams[0]
