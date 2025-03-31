@@ -82,8 +82,6 @@ export const ProductDetailsHeader = ({
     ? true
     : false
 
-  console.log({ product })
-
   return (
     <div className="border rounded-sm p-5">
       <div className="flex justify-between">

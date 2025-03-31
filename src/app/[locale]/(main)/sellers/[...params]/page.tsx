@@ -1,27 +1,34 @@
 import { SellerTabs } from "@/components/organisms"
 import { SellerPageHeader } from "@/components/sections"
-import { seller } from "@/data/sellerMock"
+import { getSellerByHandle } from "@/lib/data/seller"
 
 export default async function SellerPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ params: string[] }>
+  params: { params: string[] }
   searchParams: Promise<{
     [key: string]: string | string[] | undefined
   }>
 }) {
-  const urlParams = await params
+  const urlParams = await params.params
 
-  const sellerId = urlParams.params[0] || ""
-  const tab = urlParams.params[1] || ""
+  const seller = await getSellerByHandle(urlParams[0]!)
+
+  console.log({ seller })
+
+  const tab = urlParams[1] || ""
+
+  if (!seller) {
+    return null
+  }
 
   return (
     <main className="container">
       <SellerPageHeader seller={seller} />
       <SellerTabs
         tab={tab ? tab : "all"}
-        seller={sellerId}
+        seller={seller.id}
         searchParams={searchParams}
       />
     </main>

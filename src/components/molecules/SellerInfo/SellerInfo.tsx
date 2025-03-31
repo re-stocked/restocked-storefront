@@ -1,8 +1,7 @@
 import { StarRating } from "@/components/atoms"
 import { SellerAvatar } from "@/components/cells/SellerAvatar/SellerAvatar"
-import { SingleProductSeller } from "@/types/product"
 
-export const SellerInfo = ({ seller }: { seller: SingleProductSeller }) => {
+export const SellerInfo = ({ seller }: { seller: SellerProps }) => {
   const { photo, name, rating, reviewCount } = seller
 
   return (
@@ -13,7 +12,7 @@ export const SellerInfo = ({ seller }: { seller: SingleProductSeller }) => {
       <div>
         <h3 className="heading-sm text-primary">{name}</h3>
         <div className="flex items-center gap-2">
-          <StarRating starSize={16} rate={rating} />
+          <StarRating starSize={16} rate={rating || 0} />
           <span className="text-md text-secondary">{reviewCount} reviews</span>
         </div>
       </div>

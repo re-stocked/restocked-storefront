@@ -51,12 +51,11 @@ export const ProductCard = ({
             )}
           </div>
         </Link>
-        <Button
-          className="absolute rounded-sm bg-action text-action-on-primary h-auto lg:h-[48px] lg:group-hover:block hidden w-[calc(100%-8px)] uppercase bottom-1 z-10"
-          onClick={() => console.log("Add to cart action")}
-        >
-          Add to cart
-        </Button>
+        <Link href={`/products/${product.handle}`}>
+          <Button className="absolute rounded-sm bg-action text-action-on-primary h-auto lg:h-[48px] lg:group-hover:block hidden w-[calc(100%-8px)] uppercase bottom-1 z-10">
+            See More
+          </Button>
+        </Link>
       </div>
       <Link href={`/products/${product.handle}`}>
         <div className="flex justify-between p-4">
