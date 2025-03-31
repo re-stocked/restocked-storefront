@@ -31,7 +31,7 @@ export default function SellerPage({
   )
 }
 
-export const SellerPageContent = async ({
+const SellerPageContent = async ({
   handle,
   tab,
   searchParams,
