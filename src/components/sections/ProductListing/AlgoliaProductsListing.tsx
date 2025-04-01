@@ -30,12 +30,12 @@ export const AlgoliaProductsListing = ({
 }) => {
   const searchParamas = useSearchParams()
 
-  const facetFilters: FacetFilters = getFacedFilters(searchParamas)
+  const facetFilters: string = getFacedFilters(searchParamas)
   const page: number = +(searchParamas.get("page") || 1)
 
   const filters = category_id
     ? `categories.id:${category_id} ${facetFilters}`
-    : ""
+    : `${facetFilters.replace("AND", "")}`
 
   return (
     <InstantSearchNext searchClient={client} indexName="products" routing>
