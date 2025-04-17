@@ -2,7 +2,7 @@
 
 import { sdk } from "../config"
 import medusaError from "@/lib/helpers/medusa-error"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes, StoreCompleteCartResponse } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import {
@@ -15,24 +15,6 @@ import {
 } from "./cookies"
 import { getRegion } from "./regions"
 
-export async function quickOrder({
-  region_id,
-  items,
-}: {
-  region_id?: string
-  items: any
-}) {
-  await fetch(`${process.env.MEDUSA_BACKEND_URL}/store/quick-order`, {
-    headers: {
-      "x-publishable-api-key": process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY!,
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify({ region_id, items }),
-  })
-
-  await removeCartId()
-}
 /**
  * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
  * @param cartId - optional - The ID of the cart to retrieve.
@@ -342,9 +324,7 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     return e.message
   }
 
-  redirect(
-    `/${formData.get("shipping_address.country_code")}/checkout?step=delivery`
-  )
+  redirect(`/checkout?step=delivery`)
 }
 
 /**
@@ -363,7 +343,7 @@ export async function placeOrder(cartId?: string) {
     ...(await getAuthHeaders()),
   }
 
-  const cartRes = await sdk.store.cart
+  const cartRes: any = await sdk.store.cart
     .complete(id, {}, headers)
     .then(async (cartRes) => {
       const cartCacheTag = await getCacheTag("carts")
@@ -372,14 +352,12 @@ export async function placeOrder(cartId?: string) {
     })
     .catch(medusaError)
 
-  if (cartRes?.type === "order") {
-    const countryCode =
-      cartRes.order.shipping_address?.country_code?.toLowerCase()
+  if (cartRes?.order_set) {
     removeCartId()
-    redirect(`/${countryCode}/order/${cartRes?.order.id}/confirmed`)
+    redirect(`/order/${cartRes?.order_set.orders[0].id}/confirmed`)
   }
 
-  return cartRes.cart
+  return cartRes.order_set.cart
 }
 
 /**

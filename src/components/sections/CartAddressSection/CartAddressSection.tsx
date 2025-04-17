@@ -22,8 +22,10 @@ export const CartAddressSection = ({
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+  
+  const isOpen =
+    searchParams.get("step") === "address" || !cart?.shipping_address
 
-  const isOpen = searchParams.get("step") === "address"
 
   const { state: sameAsBilling, toggle: toggleSameAsBilling } = useToggleState(
     cart?.shipping_address && cart?.billing_address
@@ -63,19 +65,6 @@ export const CartAddressSection = ({
               onChange={toggleSameAsBilling}
               cart={cart}
             />
-
-            {/* {!sameAsBilling && (
-              <div>
-                <Heading
-                  level="h2"
-                  className="text-3xl-regular gap-x-4 pb-6 pt-8"
-                >
-                  Billing address
-                </Heading>
-
-                <BillingAddress cart={cart} />
-              </div>
-            )} */}
             <Button className="mt-6" data-testid="submit-address-button">
               Continue to delivery
             </Button>

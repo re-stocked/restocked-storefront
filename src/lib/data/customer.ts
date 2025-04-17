@@ -139,7 +139,6 @@ export async function signout() {
 
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
-
   redirect(`/`)
 }
 
