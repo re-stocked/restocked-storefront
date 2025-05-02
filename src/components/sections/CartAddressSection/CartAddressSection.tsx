@@ -84,7 +84,11 @@ export const CartAddressSection = ({
               onChange={toggleSameAsBilling}
               cart={cart}
             />
-            <Button className="mt-6" data-testid="submit-address-button">
+            <Button
+              className="mt-6"
+              data-testid="submit-address-button"
+              variant="tonal"
+            >
               Save
             </Button>
             <ErrorMessage

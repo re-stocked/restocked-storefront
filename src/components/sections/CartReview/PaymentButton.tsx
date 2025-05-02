@@ -7,6 +7,7 @@ import { HttpTypes } from "@medusajs/types"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import React, { useState } from "react"
 import { Button } from "@/components/atoms"
+import { useRouter } from "next/navigation"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -152,9 +153,11 @@ const StripePaymentButton = ({
 const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
+  const router = useRouter()
+
   const onPaymentCompleted = async () => {
     await placeOrder().catch((err) => {
-      setErrorMessage(err.message)
+      setErrorMessage(err.message !== "NEXT_REDIRECT" ? err.message : null)
     })
   }
 
@@ -167,10 +170,10 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
       <Button disabled={notReady} onClick={handlePayment} className="w-full">
         Place order
       </Button>
-      {/* <ErrorMessage
+      <ErrorMessage
         error={errorMessage}
         data-testid="manual-payment-error-message"
-      /> */}
+      />
     </>
   )
 }
