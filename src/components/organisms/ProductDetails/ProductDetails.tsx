@@ -9,20 +9,21 @@ import {
 } from "@/components/cells"
 import { seller } from "@/data/sellerMock"
 import { singleProduct } from "@/data/singleProductMock"
-import { SingleProductSeller } from "@/types/product"
+import { retrieveCustomer } from "@/lib/data/customer"
 import { SellerProps } from "@/types/seller"
 import { HttpTypes } from "@medusajs/types"
 
-export const ProductDetails = ({
+export const ProductDetails = async ({
   product,
   locale,
 }: {
   product: HttpTypes.StoreProduct & { seller?: SellerProps }
   locale: string
 }) => {
+  const user = await retrieveCustomer()
   return (
     <div>
-      <ProductDetailsHeader product={product} locale={locale} />
+      <ProductDetailsHeader product={product} locale={locale} user={user} />
       <ProductPageDetails details={product?.description || ""} />
       <ProductDetailsMeasurements measurements={singleProduct.measurements} />
       <ProductDetailsShipping />
