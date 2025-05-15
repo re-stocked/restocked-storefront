@@ -81,9 +81,11 @@ export const listProducts = async ({
     })
     .then(({ products, count }) => {
       const nextPage = count > offset + limit ? pageParam + 1 : null
+
       return {
         response: {
-          products,
+          // @ts-ignore Property 'seller' exists but TypeScript doesn't recognize it
+          products: products.filter((prod) => prod?.seller),
           count,
         },
         nextPage: nextPage,
