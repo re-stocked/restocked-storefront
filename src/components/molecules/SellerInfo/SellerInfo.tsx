@@ -5,11 +5,15 @@ import { SellerProps } from "@/types/seller"
 export const SellerInfo = ({ seller }: { seller: SellerProps }) => {
   const { photo, name, reviews } = seller
 
-  const reviewCount = reviews ? reviews?.length : 0
+  const reviewCount = reviews
+    ? reviews?.filter((rev) => rev !== null).length
+    : 0
 
   const rating =
     reviews && reviews.length > 0
-      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      ? reviews
+          .filter((rev) => rev !== null)
+          .reduce((sum, r) => sum + r?.rating || 0, 0) / reviewCount
       : 0
 
   return (
