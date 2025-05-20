@@ -32,7 +32,6 @@ export default async function Page() {
       ) {
         acc.push(orders.find((item) => item.seller.id === key))
       }
-
       return acc
     },
     []
