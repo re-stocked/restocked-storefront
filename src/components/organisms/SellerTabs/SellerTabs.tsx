@@ -31,15 +31,14 @@ export const SellerTabs = ({
       <TabsList list={tabsList} activeTab={tab} />
       <TabsContent value="products" activeTab={tab}>
         <Suspense fallback={<ProductListingSkeleton />}>
-          <ProductListing seller_id={seller_id} />
-          {/* {!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
+          {!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
             <ProductListing showSidebar seller_id={seller_id} />
           ) : (
             <AlgoliaProductsListing
               locale={locale}
               seller_handle={seller_handle}
             />
-          )} */}
+          )}
         </Suspense>
       </TabsContent>
       <TabsContent value="reviews" activeTab={tab}>
