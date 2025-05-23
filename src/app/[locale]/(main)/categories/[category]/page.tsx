@@ -6,6 +6,7 @@ import type { Metadata } from "next"
 import { generateCategoryMetadata } from "@/lib/helpers/seo"
 import { Breadcrumbs } from "@/components/atoms"
 import { AlgoliaProductsListing, ProductListing } from "@/components/sections"
+import { notFound } from "next/navigation"
 
 const ALGOLIA_ID = process.env.NEXT_PUBLIC_ALGOLIA_ID
 const ALGOLIA_SEARCH_KEY = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
@@ -34,10 +35,14 @@ async function Category({
 
   const category = await getCategoryByHandle([handle])
 
+  if (!category) {
+    return notFound()
+  }
+
   const breadcrumbsItems = [
     {
-      path: category.handle,
-      label: category.name,
+      path: category?.handle,
+      label: category?.name,
     },
   ]
 

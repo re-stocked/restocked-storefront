@@ -31,6 +31,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "i.imgur.com",
       },
+      {
+        protocol: "https",
+        hostname: "s3.eu-central-1.amazonaws.com",
+      },
     ],
   },
 }
