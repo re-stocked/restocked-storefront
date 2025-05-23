@@ -33,7 +33,9 @@ export const AlgoliaProductsListing = ({
   const query: string = searchParamas.get("query") || ""
 
   const filters = `${
-    seller_handle ? `seller.handle:${seller_handle} AND` : ""
+    seller_handle
+      ? `NOT seller:null AND seller.handle:${seller_handle} AND `
+      : "NOT seller:null AND "
   }supported_countries:${locale}${
     category_id
       ? ` AND categories.id:${category_id}${
@@ -44,22 +46,12 @@ export const AlgoliaProductsListing = ({
       : ` ${facetFilters}`
   }`
 
-  const sandboxfilters = `${
-    category_id
-      ? `categories.id:${category_id}${
-          collection_id !== undefined
-            ? ` AND collections.id:${collection_id}`
-            : ""
-        } ${facetFilters}`
-      : `${facetFilters.replace("AND", "")}`
-  }`
-
   return (
     <InstantSearchNext searchClient={client} indexName="products">
       <Configure
         query={query}
         hitsPerPage={PRODUCT_LIMIT}
-        filters={sandboxfilters}
+        filters={filters}
         page={page - 1}
       />
       <ProductsListing />
