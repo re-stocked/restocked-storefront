@@ -1,6 +1,4 @@
 import Image from "next/image"
-import { Button } from "@/components/atoms"
-import { HeartIcon } from "@/icons"
 import { HttpTypes } from "@medusajs/types"
 import { convertToLocale } from "@/lib/helpers/money"
 import { DeleteCartItemButton } from "@/components/molecules"
@@ -20,7 +18,7 @@ export const CartItemsProducts = ({
       {products.map((product) => {
         const { options } = product.variant ?? {}
         const original_total = convertToLocale({
-          amount: product.original_total,
+          amount: product.compare_at_unit_price || 0,
           currency_code,
         })
 
@@ -28,6 +26,7 @@ export const CartItemsProducts = ({
           amount: product.total,
           currency_code,
         })
+
         return (
           <div key={product.id} className="border rounded-sm p-1 flex gap-2">
             <Link href={`/products/${product.product_handle}`}>
@@ -82,11 +81,12 @@ export const CartItemsProducts = ({
                     </p>
                   </div>
                   <div className="lg:text-right flex lg:block items-center gap-2 mt-4 lg:mt-0">
-                    {total !== original_total && (
-                      <p className="line-through text-secondary label-md">
-                        {original_total}
-                      </p>
-                    )}
+                    {product.compare_at_unit_price &&
+                      total !== original_total && (
+                        <p className="line-through text-secondary label-md">
+                          {original_total}
+                        </p>
+                      )}
                     <p className="label-lg">{total}</p>
                   </div>
                 </div>
