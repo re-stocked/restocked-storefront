@@ -44,7 +44,7 @@ const CountrySelect = forwardRef<
     console.log({ value, name: props.name })
     props.onChange?.({
       target: {
-        name: "shipping_address.country_code",
+        name: props.name,
         value,
       },
     } as React.ChangeEvent<HTMLSelectElement>)
@@ -100,21 +100,23 @@ const CountrySelect = forwardRef<
           </Transition>
         </div>
       </Listbox>
-      <NativeSelect
-        ref={innerRef}
-        placeholder={placeholder}
-        defaultValue={defaultValue}
-        className={clsx(
-          "hidden w-full h-12 items-center bg-component-secondary"
-        )}
-        {...props}
-      >
-        {countryOptions?.map(({ value, label }, index) => (
-          <option key={index} value={value}>
-            {label}
-          </option>
-        ))}
-      </NativeSelect>
+      <div className="hidden">
+        <NativeSelect
+          ref={innerRef}
+          placeholder={placeholder}
+          defaultValue={defaultValue}
+          className={clsx(
+            "hidden w-full h-12 items-center bg-component-secondary"
+          )}
+          {...props}
+        >
+          {countryOptions?.map(({ value, label }, index) => (
+            <option key={index} value={value}>
+              {label}
+            </option>
+          ))}
+        </NativeSelect>
+      </div>
     </label>
   )
 })
