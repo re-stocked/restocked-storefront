@@ -17,6 +17,8 @@ import { retrieveCustomer } from "@/lib/data/customer"
 import { getUserWishlists } from "@/lib/data/wishlist"
 import { Wishlist } from "@/types/wishlist"
 import { Badge } from "@/components/atoms"
+import CountrySelector from "@/components/molecules/CountrySelector/CountrySelector"
+import { listRegions } from "@/lib/data/regions"
 
 export const Header = async () => {
   const cart = await retrieveCart().catch(() => null)
@@ -26,6 +28,8 @@ export const Header = async () => {
     const response = await getUserWishlists()
     wishlist = response.wishlists
   }
+
+  const regions = await listRegions()
 
   const wishlistCount = wishlist?.[0]?.products.length || 0
 
@@ -71,6 +75,7 @@ export const Header = async () => {
           )}
 
           <CartDropdown cart={cart} />
+          <CountrySelector regions={regions} />
         </div>
       </div>
       <Navbar categories={categories} />
