@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import Image from "next/image"
 import { v4 as uuidv4 } from "uuid"
 

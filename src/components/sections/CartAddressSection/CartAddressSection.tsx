@@ -11,7 +11,7 @@ import ErrorMessage from "@/components/molecules/ErrorMessage/ErrorMessage"
 import Spinner from "@/icons/spinner"
 import ShippingAddress from "@/components/organisms/ShippingAddress/ShippingAddress"
 import { CheckCircleSolid } from "@medusajs/icons"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 
 export const CartAddressSection = ({
   cart,

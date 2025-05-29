@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { ArrowRightIcon } from "@/icons"
 import { Style } from "@/types/styles"
 

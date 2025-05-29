@@ -1,6 +1,6 @@
 "use client"
 import { HttpTypes } from "@medusajs/types"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { CollapseIcon } from "@/icons"

@@ -2,7 +2,7 @@ import Image from "next/image"
 import { HttpTypes } from "@medusajs/types"
 import { convertToLocale } from "@/lib/helpers/money"
 import { DeleteCartItemButton } from "@/components/molecules"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 
 export const CartItemsProducts = ({
   products,

@@ -1,5 +1,5 @@
 import { Button } from "@/components/atoms"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { CollapseIcon } from "@/icons"
 import Image from "next/image"
 

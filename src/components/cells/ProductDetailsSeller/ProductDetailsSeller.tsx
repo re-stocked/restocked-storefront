@@ -1,4 +1,4 @@
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { CollapseIcon } from "@/icons"
 import { SellerInfo } from "@/components/molecules"
 import { SellerProps } from "@/types/seller"

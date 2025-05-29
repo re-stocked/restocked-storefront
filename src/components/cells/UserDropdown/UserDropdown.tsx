@@ -2,7 +2,7 @@
 
 import { Divider, LogoutButton, NavigationItem } from "@/components/atoms"
 import { Dropdown } from "@/components/molecules"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { ProfileIcon } from "@/icons"
 import { HttpTypes } from "@medusajs/types"
 import { useState } from "react"

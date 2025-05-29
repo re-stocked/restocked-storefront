@@ -3,7 +3,7 @@ import Image from "next/image"
 
 import { Button } from "@/components/atoms"
 import { HttpTypes } from "@medusajs/types"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { getSellerProductPrice } from "@/lib/helpers/get-seller-product-price"
 import { getProductPrice } from "@/lib/helpers/get-product-price"
 import { BaseHit, Hit } from "instantsearch.js"

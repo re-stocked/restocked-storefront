@@ -443,7 +443,7 @@ export async function updateRegion(countryCode: string, currentPath: string) {
   const productsCacheTag = await getCacheTag("products")
   revalidateTag(productsCacheTag)
 
-  // redirect(`/${countryCode}${currentPath}`)
+  redirect(`/${countryCode}${currentPath}`)
 }
 
 export async function listCartOptions() {

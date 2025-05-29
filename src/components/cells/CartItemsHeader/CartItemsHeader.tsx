@@ -2,7 +2,7 @@ import { Divider } from "@/components/atoms"
 import { SingleProductSeller } from "@/types/product"
 import { format } from "date-fns"
 import { SellerAvatar } from "../SellerAvatar/SellerAvatar"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 
 export const CartItemsHeader = ({
   seller,

@@ -1,6 +1,6 @@
 import { Button } from "@/components/atoms"
 import { CartItems, CartSummary } from "@/components/organisms"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { retrieveCart } from "@/lib/data/cart"
 import CartPromotionCode from "../CartReview/CartPromotionCode"
 

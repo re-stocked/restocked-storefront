@@ -10,9 +10,9 @@ import {
 import { Fragment, useEffect, useMemo, useState } from "react"
 import ReactCountryFlag from "react-country-flag"
 
-import { useParams, usePathname } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
-import { useRouter } from "@/i18n/routing"
+
 import { updateRegion } from "@/lib/data/cart"
 
 type CountryOption = {
@@ -32,8 +32,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   >(undefined)
 
   const { locale: countryCode } = useParams()
-  const currentPath = usePathname().split(`/${countryCode}`)[1].replace("/", "")
-  const router = useRouter()
+  const currentPath = usePathname().split(`/${countryCode}`)[1]
 
   const options = useMemo(() => {
     return regions
@@ -56,8 +55,6 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   }, [options, countryCode])
 
   const handleChange = (option: CountryOption) => {
-    console.log({ currentPath })
-    router.replace(currentPath, { locale: option.country })
     updateRegion(option.country, currentPath)
   }
 
@@ -72,7 +69,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
         }
       >
         <ListboxButton className="relative w-20 flex justify-between items-center h-12 bg-component-secondary text-left  cursor-default focus:outline-none border rounded-lg focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-gray-300 focus-visible:ring-offset-2 focus-visible:border-gray-300 text-base-regular">
-          <div className="txt-compact-small flex items-start gap-x-2 mx-auto">
+          <div className="txt-compact-small flex items-start mx-auto">
             {current && (
               <span className="txt-compact-small flex items-center gap-x-2">
                 {/* @ts-ignore */}
@@ -96,30 +93,13 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <ListboxOptions className="absolute z-20 overflow-auto text-small-regular bg-white border rounded-lg border-top-0 max-h-60 focus:outline-none sm:text-sm">
-              <ListboxOption
-                value={"gb"}
-                className="cursor-default select-none relative w-16 hover:bg-gray-50 py-4 border-b"
-              >
-                <span className="flex items-center gap-x-2 pl-4">
-                  {/* @ts-ignore */}
-                  <ReactCountryFlag
-                    svg
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                    }}
-                    countryCode={"gb"}
-                  />{" "}
-                  GB
-                </span>
-              </ListboxOption>
+            <ListboxOptions className="no-scrollbar absolute z-20 overflow-auto text-small-regular bg-white border rounded-lg border-top-0 max-h-60 focus:outline-none sm:text-sm">
               {options?.map((o, index) => {
                 return (
                   <ListboxOption
                     key={index}
                     value={o}
-                    className="cursor-default select-none relative w-16 hover:bg-gray-50 py-4 border-b"
+                    className="cursor-default select-none relative w-20 hover:bg-gray-50 py-4 border-b"
                   >
                     <span className="flex items-center gap-x-2 pl-4">
                       {/* @ts-ignore */}

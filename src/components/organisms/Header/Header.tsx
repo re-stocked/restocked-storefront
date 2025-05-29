@@ -7,7 +7,6 @@ import {
   MobileNavbar,
   Navbar,
 } from "@/components/cells"
-import { Link } from "@/i18n/routing"
 import { HeartIcon } from "@/icons"
 import { listCategories } from "@/lib/data/categories"
 import { PARENT_CATEGORIES } from "@/const"
@@ -19,6 +18,7 @@ import { Wishlist } from "@/types/wishlist"
 import { Badge } from "@/components/atoms"
 import CountrySelector from "@/components/molecules/CountrySelector/CountrySelector"
 import { listRegions } from "@/lib/data/regions"
+import Link from "next/link"
 
 export const Header = async () => {
   const cart = await retrieveCart().catch(() => null)

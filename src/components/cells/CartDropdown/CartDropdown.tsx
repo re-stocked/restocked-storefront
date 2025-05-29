@@ -3,7 +3,7 @@
 import { Badge, Button } from "@/components/atoms"
 import { CartDropdownItem, Dropdown } from "@/components/molecules"
 import { usePrevious } from "@/hooks/usePrevious"
-import { Link } from "@/i18n/routing"
+import Link from "next/link"
 import { CartIcon } from "@/icons"
 import { convertToLocale } from "@/lib/helpers/money"
 import { HttpTypes } from "@medusajs/types"
