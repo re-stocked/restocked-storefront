@@ -2,7 +2,7 @@ import Image from "next/image"
 import { HttpTypes } from "@medusajs/types"
 import { convertToLocale } from "@/lib/helpers/money"
 import { DeleteCartItemButton } from "@/components/molecules"
-import { Link } from "@/i18n/routing"
+import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 
 export const CartItemsProducts = ({
   products,
@@ -29,7 +29,7 @@ export const CartItemsProducts = ({
 
         return (
           <div key={product.id} className="border rounded-sm p-1 flex gap-2">
-            <Link href={`/products/${product.product_handle}`}>
+            <LocalizedClientLink href={`/products/${product.product_handle}`}>
               <div className="w-[100px] h-[132px] flex items-center justify-center">
                 {product.thumbnail ? (
                   <Image
@@ -49,24 +49,26 @@ export const CartItemsProducts = ({
                   />
                 )}
               </div>
-            </Link>
+            </LocalizedClientLink>
 
             <div className="w-full p-2">
               <div className="flex justify-between lg:mb-4">
-                <Link href={`/products/${product.product_handle}`}>
+                <LocalizedClientLink
+                  href={`/products/${product.product_handle}`}
+                >
                   <div className="w-[100px] md:w-[200px] lg:w-[280px] mb-4 lg:mb-0">
                     <h3 className="heading-xs uppercase truncate">
                       {product.subtitle} {product.title}
                     </h3>
                   </div>
-                </Link>
+                </LocalizedClientLink>
                 {delete_item && (
                   <div className="lg:flex">
                     <DeleteCartItemButton id={product.id} />
                   </div>
                 )}
               </div>
-              <Link href={`/products/${product.product_handle}`}>
+              <LocalizedClientLink href={`/products/${product.product_handle}`}>
                 <div className="lg:flex justify-between -mt-4 lg:mt-0">
                   <div className="label-md text-secondary">
                     {options?.map(({ option, id, value }) => (
@@ -90,7 +92,7 @@ export const CartItemsProducts = ({
                     <p className="label-lg">{total}</p>
                   </div>
                 </div>
-              </Link>
+              </LocalizedClientLink>
             </div>
           </div>
         )

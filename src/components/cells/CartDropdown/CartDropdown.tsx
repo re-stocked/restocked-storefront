@@ -3,7 +3,7 @@
 import { Badge, Button } from "@/components/atoms"
 import { CartDropdownItem, Dropdown } from "@/components/molecules"
 import { usePrevious } from "@/hooks/usePrevious"
-import { Link } from "@/i18n/routing"
+import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { CartIcon } from "@/icons"
 import { convertToLocale } from "@/lib/helpers/money"
 import { HttpTypes } from "@medusajs/types"
@@ -50,14 +50,14 @@ export const CartDropdown = ({
       onMouseOver={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <Link href="/cart" className="relative">
+      <LocalizedClientLink href="/cart" className="relative">
         <CartIcon size={20} />
         {Boolean(cartItemsCount) && (
           <Badge className="absolute -top-2 -right-2 w-4 h-4 p-0">
             {cartItemsCount}
           </Badge>
         )}
-      </Link>
+      </LocalizedClientLink>
       <Dropdown show={open}>
         <div className="lg:w-[460px] shadow-lg">
           <h3 className="uppercase heading-md border-b p-4">Shopping cart</h3>
@@ -77,9 +77,9 @@ export const CartDropdown = ({
                   <div className="text-secondary flex justify-between items-center">
                     Total <p className="label-xl text-primary">{total}</p>
                   </div>
-                  <Link href="/cart">
+                  <LocalizedClientLink href="/cart">
                     <Button className="w-full mt-4 py-3">Go to cart</Button>
-                  </Link>
+                  </LocalizedClientLink>
                 </div>
               </div>
             ) : (
@@ -90,9 +90,9 @@ export const CartDropdown = ({
                 <p className="text-lg text-center py-4">
                   Are you looging for inspiration?
                 </p>
-                <Link href="/categories">
+                <LocalizedClientLink href="/categories">
                   <Button className="w-full py-3">Explore Home Page</Button>
-                </Link>
+                </LocalizedClientLink>
               </div>
             )}
           </div>
