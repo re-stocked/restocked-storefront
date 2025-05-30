@@ -1,6 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils"
-import Link from "next/link"
+import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 
 import { ForwardIcon } from "@/icons"
 import { usePathname } from "next/navigation"
@@ -21,7 +21,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
           return (
             <li key={path} className="inline-flex items-center">
               {index > 0 && <ForwardIcon size={16} />}
-              <Link
+              <LocalizedClientLink
                 href={path}
                 className={cn(
                   "inline-flex items-center label-md text-primary",
@@ -30,7 +30,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
                 )}
               >
                 {label}
-              </Link>
+              </LocalizedClientLink>
             </li>
           )
         })}

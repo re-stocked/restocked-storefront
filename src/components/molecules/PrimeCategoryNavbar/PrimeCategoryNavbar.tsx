@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link"
+import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { cn } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { primeCategories } from "@/data/categories"
@@ -10,7 +10,7 @@ export const PrimeCategoryNavbar = () => {
   return (
     <div className="flex items-center gap-2">
       {Object.keys(primeCategories).map((key: string) => (
-        <Link
+        <LocalizedClientLink
           key={key}
           href={`/${key}`}
           className={cn(
@@ -19,7 +19,7 @@ export const PrimeCategoryNavbar = () => {
           )}
         >
           {primeCategories[key as keyof typeof primeCategories]}
-        </Link>
+        </LocalizedClientLink>
       ))}
     </div>
   )

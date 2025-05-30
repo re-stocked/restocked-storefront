@@ -3,6 +3,11 @@ import type { NextConfig } from "next"
 const nextConfig: NextConfig = {
   trailingSlash: false,
   reactStrictMode: true,
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   images: {
     remotePatterns: [
       {

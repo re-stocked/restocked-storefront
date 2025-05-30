@@ -1,5 +1,5 @@
 import { TabsTrigger } from "@/components/atoms"
-import Link from "next/link"
+import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 
 export const TabsList = ({
   list,
@@ -11,11 +11,11 @@ export const TabsList = ({
   return (
     <div className="flex gap-4 w-full">
       {list.map(({ label, link }) => (
-        <Link key={label} href={link}>
+        <LocalizedClientLink key={label} href={link}>
           <TabsTrigger isActive={activeTab === label.toLowerCase()}>
             {label}
           </TabsTrigger>
-        </Link>
+        </LocalizedClientLink>
       ))}
     </div>
   )
