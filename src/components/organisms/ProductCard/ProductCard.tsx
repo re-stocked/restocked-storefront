@@ -12,10 +12,8 @@ import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedL
 
 export const ProductCard = ({
   product,
-  sellerPage = false,
 }: {
   product: Hit<HttpTypes.StoreProduct> | Partial<Hit<BaseHit>>
-  sellerPage?: boolean
 }) => {
   const { cheapestPrice } = getProductPrice({
     product,
@@ -25,14 +23,11 @@ export const ProductCard = ({
     product,
   })
 
+  console.log({ product, sellerCheapestPrice, cheapestPrice })
   return (
     <div
       className={clsx(
-        "relative group border rounded-sm flex flex-col justify-between p-1 ",
-        {
-          "w-[250px] lg:w-[370px]": sellerPage,
-          "w-full h-full": !sellerPage,
-        }
+        "relative group border rounded-sm flex flex-col justify-between p-1 w-full lg:w-1/4 min-w-[250px]"
       )}
     >
       <div className="relative w-full h-full bg-primary aspect-square">
