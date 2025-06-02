@@ -103,7 +103,7 @@ const ProductsListing = () => {
             </div>
           ) : (
             <div className="w-full">
-              <ul className="flex flex-wrap">
+              <ul className="flex flex-wrap gap-4">
                 {items.map((hit) => (
                   <ProductCard key={hit.objectID} product={hit} />
                 ))}
