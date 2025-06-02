@@ -9,19 +9,80 @@ import { getProductPrice } from "@/lib/helpers/get-product-price"
 import { BaseHit, Hit } from "instantsearch.js"
 import clsx from "clsx"
 import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
+import { convertToLocale } from "@/lib/helpers/money"
+
+const getRegionPrice = (product: any, currency_code: string) => {
+  const variant = product.variants.find((variant: any) => {
+    return variant.prices
+      ? variant.prices?.some(
+          (price: any) => price.currency_code === currency_code
+        )
+      : variant.calculated_price
+  })
+
+  const price = variant?.calculated_price
+    ? {
+        calculated_price: convertToLocale({
+          amount: variant.calculated_price.calculated_amount,
+          currency_code: variant.calculated_price.currency_code,
+        }),
+        original_price: convertToLocale({
+          amount: variant.calculated_price.original_amount,
+          currency_code: variant.calculated_price.currency_code,
+        }),
+      }
+    : {
+        calculated_price: variant?.prices?.find(
+          (price: any) => price.currency_code === currency_code
+        ).amount
+          ? convertToLocale({
+              amount: variant?.prices?.find(
+                (price: any) => price.currency_code === currency_code
+              ).amount,
+              currency_code,
+            })
+          : null,
+        original_price: variant?.prices?.find(
+          (price: any) => price.currency_code === currency_code
+        ).original_amount
+          ? convertToLocale({
+              amount: variant.prices.find(
+                (price: any) => price.currency_code === currency_code
+              ).original_amount,
+              currency_code,
+            })
+          : null,
+      }
+
+  return price
+}
 
 export const ProductCard = ({
   product,
+  currency_code,
 }: {
   product: Hit<HttpTypes.StoreProduct> | Partial<Hit<BaseHit>>
+  currency_code?: string
 }) => {
-  const { cheapestPrice } = getProductPrice({
-    product,
-  })
+  // const variantId = product.variants.find((variant: any) =>
+  //   variant.prices?.some((price: any) => price.currency_code === currency_code)
+  // )?.id
 
-  const { cheapestPrice: sellerCheapestPrice } = getSellerProductPrice({
-    product,
-  })
+  // const { variantPrice } = getProductPrice({
+  //   product,
+  //   variantId,
+  // })
+
+  // const { variantPrice: sellerVariantPrice } = getSellerProductPrice({
+  //   product,
+  //   variantId,
+  // })
+
+  const price = getRegionPrice(product, currency_code || "usd")
+
+  if (!price.calculated_price) {
+    return null
+  }
 
   return (
     <div
@@ -62,24 +123,33 @@ export const ProductCard = ({
           <div className="w-full">
             <h3 className="heading-sm truncate">{product.title}</h3>
             <div className="flex items-center gap-2 mt-2">
+              <p className="font-medium">{price.calculated_price}</p>
+              {price.original_price &&
+                price.calculated_price !== price.original_price && (
+                  <p className="text-sm text-gray-500 line-through">
+                    {price.original_price}
+                  </p>
+                )}
+            </div>
+            {/* <div className="flex items-center gap-2 mt-2">
               <p className="font-medium">
-                {sellerCheapestPrice?.calculated_price ||
-                  cheapestPrice?.calculated_price}
+                {sellerVariantPrice?.calculated_price ||
+                  variantPrice?.calculated_price}
               </p>
-              {sellerCheapestPrice?.calculated_price
-                ? sellerCheapestPrice?.calculated_price !==
-                    sellerCheapestPrice?.original_price && (
+              {sellerVariantPrice?.calculated_price
+                ? sellerVariantPrice?.calculated_price !==
+                    sellerVariantPrice?.original_price && (
                     <p className="text-sm text-gray-500 line-through">
-                      {sellerCheapestPrice?.original_price}
+                      {sellerVariantPrice?.original_price}
                     </p>
                   )
-                : cheapestPrice?.calculated_price !==
-                    cheapestPrice?.original_price && (
+                : variantPrice?.calculated_price !==
+                    variantPrice?.original_price && (
                     <p className="text-sm text-gray-500 line-through">
-                      {cheapestPrice?.original_price}
+                      {variantPrice?.original_price}
                     </p>
                   )}
-            </div>
+            </div> */}
           </div>
         </div>
       </LocalizedClientLink>

@@ -12,11 +12,13 @@ export const SellerTabs = ({
   seller_handle,
   seller_id,
   locale,
+  currency_code,
 }: {
   tab: string
   seller_handle: string
   seller_id: string
   locale: string
+  currency_code?: string
 }) => {
   const tabsList = [
     { label: "products", link: `/sellers/${seller_handle}/` },
@@ -37,6 +39,7 @@ export const SellerTabs = ({
             <AlgoliaProductsListing
               locale={locale}
               seller_handle={seller_handle}
+              currency_code={currency_code}
             />
           )}
         </Suspense>
