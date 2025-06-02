@@ -8,6 +8,7 @@ import { CartIcon } from "@/icons"
 import { convertToLocale } from "@/lib/helpers/money"
 import { HttpTypes } from "@medusajs/types"
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 
 const getItemCount = (cart: HttpTypes.StoreCart | null) => {
   return cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0
@@ -22,6 +23,7 @@ export const CartDropdown = ({
 
   const previousItemCount = usePrevious(getItemCount(cart))
   const cartItemsCount = (cart && getItemCount(cart)) || 0
+  const pathname = usePathname()
 
   const total = convertToLocale({
     amount: cart?.item_total || 0,
@@ -39,7 +41,11 @@ export const CartDropdown = ({
   }, [open])
 
   useEffect(() => {
-    if (previousItemCount !== undefined && cartItemsCount > previousItemCount) {
+    if (
+      previousItemCount !== undefined &&
+      cartItemsCount > previousItemCount &&
+      pathname.split("/")[2] !== "cart"
+    ) {
       setOpen(true)
     }
   }, [cartItemsCount, previousItemCount])
