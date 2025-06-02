@@ -13,19 +13,19 @@ export const ProductListing = async ({
   collection_id,
   seller_id,
   showSidebar = false,
+  locale = process.env.NEXT_PUBLIC_DEFAULT_REGION || "pl",
 }: {
   category_id?: string
   collection_id?: string
   seller_id?: string
   showSidebar?: boolean
+  locale?: string
 }) => {
-  const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "pl"
-
   const { response } = await listProductsWithSort({
     seller_id,
     category_id,
     collection_id,
-    countryCode: DEFAULT_REGION,
+    countryCode: locale,
     sortBy: "created_at",
     queryParams: {
       limit: PRODUCT_LIMIT,

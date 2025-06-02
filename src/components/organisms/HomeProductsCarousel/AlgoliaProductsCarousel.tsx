@@ -9,25 +9,27 @@ import { ProductCard } from "../ProductCard/ProductCard"
 export const AlgoliaProductsCarousel = ({
   locale,
   seller_handle,
+  currency_code,
 }: {
   locale: string
   seller_handle?: string
+  currency_code: string
 }) => {
   const filters = `${
     seller_handle
       ? `NOT seller:null AND seller.handle:${seller_handle} AND `
       : "NOT seller:null AND "
-  }supported_countries:${locale}`
+  }supported_countries:${locale} AND variants.prices.currency_code:${currency_code}`
 
   return (
     <InstantSearchNext searchClient={client} indexName="products">
-      <Configure hitsPerPage={4} filters={filters} page={1} />
-      <ProductsListing />
+      <Configure hitsPerPage={4} filters={filters} page={0} />
+      <ProductsListing currency_code={currency_code} />
     </InstantSearchNext>
   )
 }
 
-const ProductsListing = () => {
+const ProductsListing = ({ currency_code }: { currency_code: string }) => {
   const { items } = useHits()
 
   return (
@@ -46,7 +48,11 @@ const ProductsListing = () => {
             <Carousel
               align="start"
               items={items.map((hit) => (
-                <ProductCard key={hit.objectID} product={hit} />
+                <ProductCard
+                  key={hit.objectID}
+                  product={hit}
+                  currency_code={currency_code}
+                />
               ))}
             />
           </div>

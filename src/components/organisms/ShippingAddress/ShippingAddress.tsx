@@ -2,7 +2,7 @@ import { HttpTypes } from "@medusajs/types"
 import { Container } from "@medusajs/ui"
 import { mapKeys } from "lodash"
 import React, { useEffect, useMemo, useState } from "react"
-import { Checkbox, Input } from "@/components/atoms"
+import { Input } from "@/components/atoms"
 import AddressSelect from "@/components/cells/AddressSelect/AddressSelect"
 import CountrySelect from "@/components/cells/CountrySelect/CountrySelect"
 
@@ -100,7 +100,7 @@ const ShippingAddress = ({
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-4">
             <AddressSelect
-              addresses={customer.addresses}
+              addresses={addressesInRegion || []}
               addressInput={
                 mapKeys(formData, (_, key) =>
                   key.replace("shipping_address.", "")

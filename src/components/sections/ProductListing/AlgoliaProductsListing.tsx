@@ -20,11 +20,13 @@ export const AlgoliaProductsListing = ({
   collection_id,
   seller_handle,
   locale = process.env.NEXT_PUBLIC_DEFAULT_REGION,
+  currency_code,
 }: {
   category_id?: string
   collection_id?: string
   locale?: string
   seller_handle?: string
+  currency_code?: string
 }) => {
   const searchParamas = useSearchParams()
 
@@ -54,12 +56,12 @@ export const AlgoliaProductsListing = ({
         filters={filters}
         page={page - 1}
       />
-      <ProductsListing />
+      <ProductsListing currency_code={currency_code} />
     </InstantSearchNext>
   )
 }
 
-const ProductsListing = () => {
+const ProductsListing = ({ currency_code }: { currency_code?: string }) => {
   const {
     items,
     results,
@@ -105,7 +107,11 @@ const ProductsListing = () => {
             <div className="w-full">
               <ul className="flex flex-wrap gap-4">
                 {items.map((hit) => (
-                  <ProductCard key={hit.objectID} product={hit} />
+                  <ProductCard
+                    key={hit.objectID}
+                    product={hit}
+                    currency_code={currency_code}
+                  />
                 ))}
               </ul>
             </div>
