@@ -4,15 +4,13 @@ import Image from "next/image"
 import { Button } from "@/components/atoms"
 import { HttpTypes } from "@medusajs/types"
 
-import { getSellerProductPrice } from "@/lib/helpers/get-seller-product-price"
-import { getProductPrice } from "@/lib/helpers/get-product-price"
 import { BaseHit, Hit } from "instantsearch.js"
 import clsx from "clsx"
 import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { convertToLocale } from "@/lib/helpers/money"
 
 const getRegionPrice = (product: any, currency_code: string) => {
-  const variant = product.variants.find((variant: any) => {
+  const variant = product.variants?.find((variant: any) => {
     return variant.prices
       ? variant.prices?.some(
           (price: any) => price.currency_code === currency_code
@@ -64,20 +62,6 @@ export const ProductCard = ({
   product: Hit<HttpTypes.StoreProduct> | Partial<Hit<BaseHit>>
   currency_code?: string
 }) => {
-  // const variantId = product.variants.find((variant: any) =>
-  //   variant.prices?.some((price: any) => price.currency_code === currency_code)
-  // )?.id
-
-  // const { variantPrice } = getProductPrice({
-  //   product,
-  //   variantId,
-  // })
-
-  // const { variantPrice: sellerVariantPrice } = getSellerProductPrice({
-  //   product,
-  //   variantId,
-  // })
-
   const price = getRegionPrice(product, currency_code || "usd")
 
   if (!price.calculated_price) {
