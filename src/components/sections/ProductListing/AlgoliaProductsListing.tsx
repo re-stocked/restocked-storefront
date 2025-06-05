@@ -38,7 +38,7 @@ export const AlgoliaProductsListing = ({
     seller_handle
       ? `NOT seller:null AND seller.handle:${seller_handle} AND `
       : "NOT seller:null AND "
-  }supported_countries:${locale}${
+  }NOT seller.store_status:SUSPENDED AND supported_countries:${locale}${
     category_id
       ? ` AND categories.id:${category_id}${
           collection_id !== undefined

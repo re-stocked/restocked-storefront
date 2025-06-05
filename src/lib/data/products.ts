@@ -62,7 +62,7 @@ export const listProducts = async ({
 
   return sdk.client
     .fetch<{
-      products: HttpTypes.StoreProduct[]
+      products: (HttpTypes.StoreProduct & { seller?: SellerProps })[]
       count: number
     }>(`/store/products`, {
       method: "GET",
@@ -79,7 +79,11 @@ export const listProducts = async ({
       headers,
       cache: "no-cache",
     })
-    .then(({ products, count }) => {
+    .then(({ products: productsRaw, count }) => {
+      const products = productsRaw.filter(
+        (product) => product.seller?.store_status !== "SUSPENDED"
+      )
+
       const nextPage = count > offset + limit ? pageParam + 1 : null
 
       const response = products.filter((prod) => {
