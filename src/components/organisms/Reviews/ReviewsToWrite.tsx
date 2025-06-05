@@ -1,15 +1,22 @@
 "use client"
-import { Button, Card, NavigationItem } from "@/components/atoms"
+import { Card, NavigationItem } from "@/components/atoms"
 import { Modal, ReviewForm } from "@/components/molecules"
 import { isEmpty } from "lodash"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
-import { Review } from "@/lib/data/reviews"
+import { Order } from "@/lib/data/reviews"
 import { navigation } from "./navigation"
-import { ReviewCard } from "./ReviewCard"
+import { OrderCard } from "./OrderCard"
+import { HttpTypes } from "@medusajs/types"
 
-export const ReviewsToWrite = ({ reviews }: { reviews: Review[] }) => {
-  const [showForm, setShowForm] = useState<Review | null>(null)
+export const ReviewsToWrite = ({ orders }: { orders: Array<Order> }) => {
+  const [showForm, setShowForm] = useState<
+    | (HttpTypes.StoreOrder & {
+        seller: { id: string; name: string; reviews?: any[] }
+        reviews: any[]
+      })
+    | null
+  >(null)
   const pathname = usePathname()
 
   return (
@@ -28,7 +35,7 @@ export const ReviewsToWrite = ({ reviews }: { reviews: Review[] }) => {
             </NavigationItem>
           ))}
         </div>
-        {isEmpty(reviews) ? (
+        {isEmpty(orders) ? (
           <Card>
             <div className="text-center py-6">
               <h3 className="heading-lg text-primary uppercase">
@@ -40,12 +47,8 @@ export const ReviewsToWrite = ({ reviews }: { reviews: Review[] }) => {
             </div>
           </Card>
         ) : (
-          reviews.map((review) => (
-            <ReviewCard
-              key={review.id}
-              review={review}
-              showForm={setShowForm}
-            />
+          orders.map((order) => (
+            <OrderCard key={order.id} order={order} showForm={setShowForm} />
           ))
         )}
       </div>

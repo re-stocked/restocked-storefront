@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache"
 import { sdk } from "../config"
 import { getAuthHeaders } from "./cookies"
+import { HttpTypes } from "@medusajs/types"
 
 export type Review = {
   id: string
@@ -16,6 +17,11 @@ export type Review = {
   updated_at: string
 }
 
+export type Order = HttpTypes.StoreOrder & {
+  seller: { id: string; name: string; reviews?: any[] }
+  reviews: any[]
+}
+
 const getReviews = async () => {
   const headers = {
     ...(await getAuthHeaders()),
@@ -23,7 +29,7 @@ const getReviews = async () => {
 
   const reviews = await sdk.client.fetch("/store/reviews", {
     headers,
-    query: { fields: "*seller,+customer.id" },
+    query: { fields: "*seller,+customer.id,+order_id" },
     method: "GET",
   })
 

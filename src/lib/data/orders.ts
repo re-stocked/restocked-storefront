@@ -51,6 +51,7 @@ export const listOrders = async (
       orders: Array<
         HttpTypes.StoreOrder & {
           seller: { id: string; name: string; reviews?: any[] }
+          reviews: any[]
         }
       >
     }>(`/store/orders`, {
@@ -59,7 +60,8 @@ export const listOrders = async (
         limit,
         offset,
         order: "-created_at",
-        fields: "*items,+items.metadata,*items.variant,*items.product,*seller",
+        fields:
+          "*items,+items.metadata,*items.variant,*items.product,*seller,*reviews",
         ...filters,
       },
       headers,
