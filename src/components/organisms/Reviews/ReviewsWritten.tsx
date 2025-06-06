@@ -1,14 +1,18 @@
 "use client"
 import { navigation } from "./navigation"
 import { Card, NavigationItem } from "@/components/atoms"
-import { StarIcon } from "@/icons"
-import { Review } from "@/lib/data/reviews"
-import { cn } from "@/lib/utils"
+import { Order, Review } from "@/lib/data/reviews"
 import { isEmpty } from "lodash"
 import { usePathname } from "next/navigation"
-import { ReviewCard } from "./ReviewCard"
+import { OrderCard } from "./OrderCard"
 
-export const ReviewsWritten = ({ reviews }: { reviews: Review[] }) => {
+export const ReviewsWritten = ({
+  reviews,
+  orders,
+}: {
+  reviews: Review[]
+  orders: Order[]
+}) => {
   const pathname = usePathname()
 
   return (
@@ -40,8 +44,8 @@ export const ReviewsWritten = ({ reviews }: { reviews: Review[] }) => {
         </Card>
       ) : (
         <div className="space-y-2">
-          {reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+          {orders.map((order) => (
+            <OrderCard key={order.id} order={order} />
           ))}
         </div>
       )}

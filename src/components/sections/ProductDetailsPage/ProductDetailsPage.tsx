@@ -1,6 +1,7 @@
 import { ProductDetails, ProductGallery } from "@/components/organisms"
 import { listProducts } from "@/lib/data/products"
 import { HomeProductSection } from "../HomeProductSection/HomeProductSection"
+import NotFound from "@/app/not-found"
 
 export const ProductDetailsPage = async ({
   handle,
@@ -15,6 +16,10 @@ export const ProductDetailsPage = async ({
   }).then(({ response }) => response.products[0])
 
   if (!prod) return null
+
+  if (prod.seller?.store_status === "SUSPENDED") {
+    return NotFound()
+  }
 
   return (
     <>

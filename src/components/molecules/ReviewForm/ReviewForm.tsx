@@ -12,11 +12,11 @@ import { Button } from "@/components/atoms"
 import { InteractiveStarRating } from "@/components/atoms/InteractiveStarRating/InteractiveStarRating"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import { createReview, Review } from "@/lib/data/reviews"
+import { createReview, Order, Review } from "@/lib/data/reviews"
 
 interface Props {
   handleClose?: () => void
-  seller: Review
+  seller: Order
 }
 
 export const ReviewForm: React.FC<Props> = ({ ...props }) => {
@@ -103,7 +103,7 @@ const Form: React.FC<Props> = ({ handleClose, seller }) => {
                 errors.opinion?.message ? "bottom-8" : "bottom-3 "
               )}
             >
-              {`${lettersCount} / 1000`}
+              {`${lettersCount} / 400`}
             </div>
             {errors.opinion?.message && (
               <p className="label-sm text-negative">
