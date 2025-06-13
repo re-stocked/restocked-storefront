@@ -33,8 +33,8 @@ export const OrderCancel = ({ order }: { order: any }) => {
 
   return (
     <>
-      <div className="flex justify-between items-center">
-        <div>
+      <div className="md:flex justify-between items-center">
+        <div className="mb-4 md:mb-0">
           <h2 className="text-primary label-lg uppercase">Cancel Order</h2>
           <p className="text-secondary label-md max-w-sm">
             Once you place your order, you can cancel it until the seller begins

@@ -65,7 +65,7 @@ export const OrderReturnSection = ({
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 mt-6 gap-5 md:gap-8">
       <UserNavigation />
-      <div className="md:col-span-3">
+      <div className="md:col-span-3 mb-8 md:mb-0">
         {tab === 0 ? (
           <LocalizedClientLink href={`/user/orders/${order.order_set.id}`}>
             <Button
@@ -86,7 +86,7 @@ export const OrderReturnSection = ({
             Select items
           </Button>
         )}
-        <div className="grid grid-cols-8 gap-4 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-8 gap-4 mt-8">
           <div className="col-span-4">
             <div className="mb-4">
               <StepProgressBar
@@ -113,7 +113,7 @@ export const OrderReturnSection = ({
             )}
           </div>
           <div />
-          <div className="col-span-3">
+          <div className="col-span-4 md:col-span-3">
             <ReturnSummaryTab
               currency_code={order.currency_code}
               selectedItems={selectedItems}

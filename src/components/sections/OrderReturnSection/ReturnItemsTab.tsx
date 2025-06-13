@@ -35,8 +35,8 @@ export const ReturnItemsTab = ({
       <Card className="flex items-center justify-between p-4">
         <ul className="w-full">
           {order.items.map((item: any) => (
-            <li key={item.id} className="flex justify-between gap-2 w-full">
-              <div className="flex items-center gap-2 w-2/3">
+            <li key={item.id} className="md:flex justify-between gap-2 w-full">
+              <div className="flex items-center gap-2 md:w-2/3 mb-4 md:mb-0">
                 <Checkbox
                   checked={selectedItems.some(
                     (i) => i.line_item_id === item.id
@@ -77,7 +77,7 @@ export const ReturnItemsTab = ({
                   </div>
                 </div>
               </div>
-              <div className="w-1/3">
+              <div className="md:w-1/3">
                 <Listbox
                   value={
                     selectedItems.find((i) => i.line_item_id === item.id)

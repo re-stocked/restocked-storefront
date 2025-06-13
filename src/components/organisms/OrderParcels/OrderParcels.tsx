@@ -19,8 +19,8 @@ export const OrderParcels = async ({ orders }: { orders: any[] }) => {
             <div className="p-4 border-b">
               <OrderParcelStatus order={order} />
             </div>
-            <div className="p-4 border-b flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="p-4 border-b md:flex items-center justify-between">
+              <div className="flex items-center gap-4 mb-4 md:mb-0">
                 <Avatar src={order.seller.photo} />
                 <p className="text-primary">{order.seller.name}</p>
               </div>
