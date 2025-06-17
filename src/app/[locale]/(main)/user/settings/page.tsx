@@ -1,4 +1,3 @@
-import { Button, Card } from "@/components/atoms"
 import { LoginForm, ProfileDetails } from "@/components/molecules"
 import { UserNavigation } from "@/components/molecules"
 import { ProfilePassword } from "@/components/molecules/ProfileDetails/ProfilePassword"

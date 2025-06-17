@@ -24,7 +24,6 @@ export const listCartShippingMethods = async (
         method: "GET",
         query: {
           cart_id: cartId,
-          is_return,
           fields:
             "+service_zone.fulfllment_set.type,*service_zone.fulfillment_set.location.address",
         },

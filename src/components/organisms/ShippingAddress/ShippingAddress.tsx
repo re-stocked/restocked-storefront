@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { Input } from "@/components/atoms"
 import AddressSelect from "@/components/cells/AddressSelect/AddressSelect"
 import CountrySelect from "@/components/cells/CountrySelect/CountrySelect"
+import { usePathname } from "next/navigation"
 
 const ShippingAddress = ({
   customer,
@@ -17,6 +18,9 @@ const ShippingAddress = ({
   checked: boolean
   onChange: () => void
 }) => {
+  const pathname = usePathname()
+
+  const locale = pathname.split("/")[1]
   const [formData, setFormData] = useState<Record<string, any>>({
     "shipping_address.first_name": cart?.shipping_address?.first_name || "",
     "shipping_address.last_name": cart?.shipping_address?.last_name || "",
@@ -24,7 +28,8 @@ const ShippingAddress = ({
     "shipping_address.company": cart?.shipping_address?.company || "",
     "shipping_address.postal_code": cart?.shipping_address?.postal_code || "",
     "shipping_address.city": cart?.shipping_address?.city || "",
-    "shipping_address.country_code": cart?.shipping_address?.country_code || "",
+    "shipping_address.country_code":
+      cart?.shipping_address?.country_code || locale,
     "shipping_address.province": cart?.shipping_address?.province || "",
     "shipping_address.phone": cart?.shipping_address?.phone || "",
     email: cart?.email || "",
@@ -90,6 +95,10 @@ const ShippingAddress = ({
       [e.target.name]: e.target.value,
     })
   }
+
+  const countries = useMemo(() => {
+    return cart?.region?.countries?.find((c) => c.iso_2 === locale)
+  }, [cart?.region, formData])
 
   return (
     <>
@@ -168,7 +177,8 @@ const ShippingAddress = ({
         <CountrySelect
           name="shipping_address.country_code"
           autoComplete="country"
-          region={cart?.region}
+          // @ts-ignore
+          region={{ ...cart?.region, countries: [countries!] }}
           value={formData["shipping_address.country_code"]}
           onChange={handleChange}
           required

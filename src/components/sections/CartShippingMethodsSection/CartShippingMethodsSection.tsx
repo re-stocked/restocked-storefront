@@ -148,7 +148,7 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
       acc[sellerId] = []
     }
 
-    acc[sellerId].push(method)
+    acc[sellerId]?.push(method)
     return acc
   }, {})
 
@@ -167,7 +167,7 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
       {missingModal && (
         <Modal
           heading="Missing seller shipping option"
-          onClose={() => router.push("/cart")}
+          onClose={() => router.push(`/${pathname.split("/")[1]}/cart`)}
         >
           <div className="p-4">
             <h2 className="heading-sm">
