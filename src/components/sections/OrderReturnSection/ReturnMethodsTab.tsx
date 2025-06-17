@@ -1,4 +1,4 @@
-import { Card } from "@/components/atoms"
+import { Card, Checkbox } from "@/components/atoms"
 
 export const ReturnMethodsTab = ({
   shippingMethods,
@@ -25,7 +25,18 @@ export const ReturnMethodsTab = ({
               No shipping methods available
             </div>
           ) : (
-            <div>sdsad</div>
+            <ul>
+              {shippingMethods.map((method: any) => (
+                <li
+                  key={method.id}
+                  onClick={() => handleSetReturnMethod(method.id)}
+                  className="flex items-center gap-4 my-2 cursor-pointer"
+                >
+                  <Checkbox checked={returnMethod === method.id} />
+                  <span className="label-lg">{method.name}</span>
+                </li>
+              ))}
+            </ul>
           )}
         </Card>
       </div>

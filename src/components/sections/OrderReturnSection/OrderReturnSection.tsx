@@ -9,6 +9,8 @@ import { useState } from "react"
 import { ReturnSummaryTab } from "./ReturnSummaryTab"
 import { ReturnMethodsTab } from "./ReturnMethodsTab"
 import { StepProgressBar } from "@/components/cells/StepProgressBar/StepProgressBar"
+import { createReturnRequest } from "@/lib/data/orders"
+import { useRouter } from "next/navigation"
 
 export const OrderReturnSection = ({
   order,
@@ -23,6 +25,7 @@ export const OrderReturnSection = ({
   const [selectedItems, setSelectedItems] = useState<any[]>([])
   const [error, setError] = useState<boolean>(false)
   const [returnMethod, setReturnMethod] = useState<any>(null)
+  const router = useRouter()
 
   const handleTabChange = (tab: number) => {
     const noReason = selectedItems.filter((item) => !item.reason_id)
@@ -58,14 +61,27 @@ export const OrderReturnSection = ({
     }
   }
 
-  const handleSubmit = () => {
-    console.log(selectedItems)
+  const handleSubmit = async () => {
+    const data = {
+      order_id: order.id,
+      customer_note: "",
+      shipping_option_id: returnMethod,
+      line_items: selectedItems,
+    }
+
+    const { order_return_request } = await createReturnRequest(data)
+
+    if (!order_return_request.id) {
+      return console.log("Error creating return request")
+    }
+
+    router.push(`/user/orders/${order_return_request.id}/request-success`)
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 mt-6 gap-5 md:gap-8">
       <UserNavigation />
-      <div className="md:col-span-3">
+      <div className="md:col-span-3 mb-8 md:mb-0">
         {tab === 0 ? (
           <LocalizedClientLink href={`/user/orders/${order.order_set.id}`}>
             <Button
@@ -86,7 +102,7 @@ export const OrderReturnSection = ({
             Select items
           </Button>
         )}
-        <div className="grid grid-cols-8 gap-4 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-8 gap-4 mt-8">
           <div className="col-span-4">
             <div className="mb-4">
               <StepProgressBar
@@ -113,7 +129,7 @@ export const OrderReturnSection = ({
             )}
           </div>
           <div />
-          <div className="col-span-3">
+          <div className="col-span-4 md:col-span-3">
             <ReturnSummaryTab
               currency_code={order.currency_code}
               selectedItems={selectedItems}
@@ -121,6 +137,7 @@ export const OrderReturnSection = ({
               handleTabChange={handleTabChange}
               tab={tab}
               returnMethod={returnMethod}
+              handleSubmit={handleSubmit}
             />
           </div>
         </div>

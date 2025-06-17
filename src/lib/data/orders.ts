@@ -48,6 +48,58 @@ export const retrieveOrder = async (id: string) => {
     .catch((err) => medusaError(err))
 }
 
+export const createReturnRequest = async (data: any) => {
+  const headers = {
+    ...(await getAuthHeaders()),
+    "Content-Type": "application/json",
+    "x-publishable-api-key": process.env
+      .NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string,
+  }
+
+  const response = await fetch(
+    `${process.env.MEDUSA_BACKEND_URL}/store/return-request`,
+    {
+      method: "POST",
+      headers,
+      body: JSON.stringify(data),
+    }
+  )
+    .then((res) => res)
+    .catch((err) => medusaError(err))
+
+  return response.json()
+}
+
+export const getReturns = async () => {
+  const headers = await getAuthHeaders()
+
+  return sdk.client
+    .fetch<{
+      order_return_requests: Array<any>
+    }>(`/store/return-request`, {
+      method: "GET",
+      headers,
+      cache: "force-cache",
+    })
+    .then((res) => res)
+    .catch((err) => medusaError(err))
+}
+
+export const retriveReturnMethods = async (order_id: string) => {
+  const headers = await getAuthHeaders()
+
+  return sdk.client
+    .fetch<{
+      shipping_options: Array<any>
+    }>(`/store/shipping-options/return?order_id=${order_id}`, {
+      method: "GET",
+      headers,
+      cache: "force-cache",
+    })
+    .then(({ shipping_options }) => shipping_options)
+    .catch((err) => medusaError(err))
+}
+
 export const listOrders = async (
   limit: number = 10,
   offset: number = 0,

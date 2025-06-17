@@ -1,6 +1,9 @@
 import { OrderReturnSection } from "@/components/sections/OrderReturnSection/OrderReturnSection"
-import { listCartShippingMethods } from "@/lib/data/fulfillment"
-import { retrieveOrder, retrieveReturnReasons } from "@/lib/data/orders"
+import {
+  retrieveOrder,
+  retrieveReturnReasons,
+  retriveReturnMethods,
+} from "@/lib/data/orders"
 
 export default async function ReturnOrderPage({
   params,
@@ -11,17 +14,14 @@ export default async function ReturnOrderPage({
 
   const order = (await retrieveOrder(id)) as any
   const returnReasons = await retrieveReturnReasons()
-  const shippingMethods = await listCartShippingMethods(
-    order.order_set.cart_id!,
-    true
-  )
+  const returnMethods = await retriveReturnMethods(id)
 
   return (
     <main className="container">
       <OrderReturnSection
         order={order}
         returnReasons={returnReasons}
-        shippingMethods={shippingMethods as any}
+        shippingMethods={returnMethods as any}
       />
     </main>
   )
