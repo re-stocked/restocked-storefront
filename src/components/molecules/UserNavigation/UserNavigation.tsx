@@ -15,8 +15,13 @@ const navigationItems = [
     href: "/user/orders",
   },
   {
+
     label: "Messages",
     href: "/user/messages",
+  },
+  {
+    label: "Returns",
+    href: "/user/returns",
   },
   {
     label: "Addresses",

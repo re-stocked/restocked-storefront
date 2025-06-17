@@ -9,6 +9,7 @@ export const ReturnSummaryTab = ({
   handleTabChange,
   tab,
   returnMethod,
+  handleSubmit,
 }: {
   selectedItems: any[]
   items: any[]
@@ -16,6 +17,7 @@ export const ReturnSummaryTab = ({
   handleTabChange: (tab: number) => void
   tab: number
   returnMethod: any
+  handleSubmit: () => void
 }) => {
   const selected = items.filter((item) =>
     selectedItems.some((i) => i.line_item_id === item.id)
@@ -81,7 +83,7 @@ export const ReturnSummaryTab = ({
           disabled={
             (tab === 0 && !selected.length) || (tab === 1 && !returnMethod)
           }
-          onClick={() => handleTabChange(1)}
+          onClick={tab === 0 ? () => handleTabChange(1) : () => handleSubmit()}
         >
           {tab === 0
             ? selected.length

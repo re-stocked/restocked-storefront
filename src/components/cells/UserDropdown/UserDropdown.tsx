@@ -49,6 +49,7 @@ export const UserDropdown = ({
                 </Badge>
               )}
             </NavigationItem>
+            <NavigationItem href="/user/returns">Returns</NavigationItem>
             <NavigationItem href="/user/addresses">Addresses</NavigationItem>
             <NavigationItem href="/user/reviews">Reviews</NavigationItem>
             <NavigationItem href="/user/wishlist">Wishlist</NavigationItem>
