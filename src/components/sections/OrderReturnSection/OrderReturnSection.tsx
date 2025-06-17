@@ -9,6 +9,8 @@ import { useState } from "react"
 import { ReturnSummaryTab } from "./ReturnSummaryTab"
 import { ReturnMethodsTab } from "./ReturnMethodsTab"
 import { StepProgressBar } from "@/components/cells/StepProgressBar/StepProgressBar"
+import { createReturnRequest } from "@/lib/data/orders"
+import { useRouter } from "next/navigation"
 
 export const OrderReturnSection = ({
   order,
@@ -23,6 +25,7 @@ export const OrderReturnSection = ({
   const [selectedItems, setSelectedItems] = useState<any[]>([])
   const [error, setError] = useState<boolean>(false)
   const [returnMethod, setReturnMethod] = useState<any>(null)
+  const router = useRouter()
 
   const handleTabChange = (tab: number) => {
     const noReason = selectedItems.filter((item) => !item.reason_id)
@@ -58,8 +61,21 @@ export const OrderReturnSection = ({
     }
   }
 
-  const handleSubmit = () => {
-    console.log(selectedItems)
+  const handleSubmit = async () => {
+    const data = {
+      order_id: order.id,
+      customer_note: "",
+      shipping_option_id: returnMethod,
+      line_items: selectedItems,
+    }
+
+    const { order_return_request } = await createReturnRequest(data)
+
+    if (!order_return_request.id) {
+      return console.log("Error creating return request")
+    }
+
+    router.push(`/user/orders/${order_return_request.id}/request-success`)
   }
 
   return (
@@ -121,6 +137,7 @@ export const OrderReturnSection = ({
               handleTabChange={handleTabChange}
               tab={tab}
               returnMethod={returnMethod}
+              handleSubmit={handleSubmit}
             />
           </div>
         </div>

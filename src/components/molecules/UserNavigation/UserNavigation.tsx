@@ -8,6 +8,10 @@ const navigationItems = [
     href: "/user/orders",
   },
   {
+    label: "Returns",
+    href: "/user/returns",
+  },
+  {
     label: "Addresses",
     href: "/user/addresses",
   },

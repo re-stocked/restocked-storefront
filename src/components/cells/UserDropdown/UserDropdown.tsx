@@ -33,6 +33,7 @@ export const UserDropdown = ({
               </h3>
             </div>
             <NavigationItem href="/user/orders">Orders</NavigationItem>
+            <NavigationItem href="/user/returns">Returns</NavigationItem>
             <NavigationItem href="/user/addresses">Addresses</NavigationItem>
             <NavigationItem href="/user/reviews">Reviews</NavigationItem>
             <NavigationItem href="/user/wishlist">Wishlist</NavigationItem>
