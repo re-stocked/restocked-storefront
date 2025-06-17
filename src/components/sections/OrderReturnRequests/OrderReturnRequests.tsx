@@ -27,8 +27,9 @@ export const OrderReturnRequests = ({
           No returns
         </Heading>
         <p className="text-center text-secondary w-96 mt-8 mx-auto">
-          You haven't requested any returns yet. Once you request a return, it
-          will appear here.
+          {
+            "You haven't requested any returns yet. Once you request a return, it will appear here."
+          }
         </p>
       </div>
     )
