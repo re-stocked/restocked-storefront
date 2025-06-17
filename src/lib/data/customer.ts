@@ -1,6 +1,5 @@
 "use server"
 
-import medusaError from "../helpers/medusa-error"
 import { sdk } from "../config"
 import { HttpTypes } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
@@ -37,7 +36,7 @@ export const retrieveCustomer =
         },
         headers,
         next,
-        cache: "no-cache",
+        cache: "force-cache",
       })
       .then(({ customer }) => customer)
       .catch(() => null)
@@ -252,4 +251,28 @@ export const updateCustomerAddress = async (
     .catch((err) => {
       return { success: false, error: err.toString() }
     })
+}
+
+export const updateCustomerPassword = async (
+  password: string,
+  email: string
+): Promise<any> => {
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  // const token = await sdk.auth.resetPassword("customer", "emailpass", {
+  //   identifier: email,
+  // })
+
+  // const res = await sdk.auth
+  //   .updateProvider("customer", "emailpass", { password }, token as string)
+  //   .then(() => {
+  //     return { success: true, error: null }
+  //   })
+  //   .catch((err: any) => {
+  //     return { success: false, error: err.toString() }
+  //   })
+
+  // return res
 }
