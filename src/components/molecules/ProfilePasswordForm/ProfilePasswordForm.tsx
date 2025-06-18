@@ -4,7 +4,6 @@ import { Button, Card } from "@/components/atoms"
 import { LabeledInput } from "@/components/cells"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CheckCircle } from "@medusajs/icons"
-import { toast } from "@medusajs/ui"
 import {
   FieldError,
   FieldValues,
@@ -37,7 +36,7 @@ function validatePassword(password: string) {
 export const ProfilePasswordForm = ({
   user,
 }: {
-  user: HttpTypes.StoreCustomer
+  user?: HttpTypes.StoreCustomer
 }) => {
   const form = useForm<ProfilePasswordFormData>({
     resolver: zodResolver(profilePasswordSchema),
@@ -60,7 +59,7 @@ const Form = ({
   user,
 }: {
   form: UseFormReturn<ProfilePasswordFormData>
-  user: HttpTypes.StoreCustomer
+  user?: HttpTypes.StoreCustomer
 }) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState<
     FieldError | undefined
@@ -107,7 +106,7 @@ const Form = ({
       try {
         const isValid = await sdk.auth
           .login("customer", "emailpass", {
-            email: user.email,
+            email: user?.email,
             password: data.currentPassword,
           })
           .then(() => true)
@@ -122,7 +121,7 @@ const Form = ({
           return
         }
 
-        const res = await updateCustomerPassword(data.newPassword, user.email)
+        const res = await updateCustomerPassword(data.newPassword, user?.email!)
       } catch (err) {
         console.log(err)
         return
