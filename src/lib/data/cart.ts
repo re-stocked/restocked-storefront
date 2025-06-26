@@ -310,6 +310,35 @@ export async function removeShippingMethod(shippingMethodId: string) {
     .catch(medusaError)
 }
 
+export async function removeShippingMethod(shippingMethodId: string) {
+  const cartId = await getCartId()
+
+  if (!cartId) {
+    throw new Error("No existing cart found")
+  }
+
+  const headers = {
+    ...(await getAuthHeaders()),
+    "Content-Type": "application/json",
+    "x-publishable-api-key": process.env
+      .NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string,
+  }
+
+  return fetch(
+    `${process.env.MEDUSA_BACKEND_URL}/store/carts/${cartId}/shipping-methods`,
+    {
+      method: "DELETE",
+      body: JSON.stringify({ shipping_method_ids: [shippingMethodId] }),
+      headers,
+    }
+  )
+    .then(async () => {
+      const cartCacheTag = await getCacheTag("carts")
+      revalidateTag(cartCacheTag)
+    })
+    .catch(medusaError)
+}
+
 export async function deletePromotionCode(promoId: string) {
   const cartId = await getCartId()
 
