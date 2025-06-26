@@ -4,8 +4,6 @@ import { Chip, Input, StarRating } from "@/components/atoms"
 import { Accordion, FilterCheckboxOption } from "@/components/molecules"
 import useFilters from "@/hooks/useFilters"
 import useUpdateSearchParams from "@/hooks/useUpdateSearchParams"
-import { DollarIcon } from "@/icons"
-import { retrieveCart } from "@/lib/data/cart"
 import { cn } from "@/lib/utils"
 import { useSearchParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
@@ -52,7 +50,6 @@ function ConditionFilter() {
               disabled={Boolean(!count)}
               onCheck={selectHandler}
               label={label}
-              amount={count}
             />
           </li>
         ))}
@@ -84,7 +81,6 @@ function ColorFilter() {
               disabled={Boolean(!count)}
               onCheck={selectHandler}
               label={label}
-              amount={count}
             />
             <div
               style={{ backgroundColor: label.toLowerCase() }}
