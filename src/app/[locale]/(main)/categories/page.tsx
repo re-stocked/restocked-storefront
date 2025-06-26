@@ -36,10 +36,7 @@ async function AllCategories({
         {!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
           <ProductListing showSidebar locale={locale} />
         ) : (
-          <AlgoliaProductsListing
-            locale={locale}
-            currency_code={currency_code}
-          />
+          <AlgoliaProductsListing locale={locale} />
         )}
       </Suspense>
     </main>
