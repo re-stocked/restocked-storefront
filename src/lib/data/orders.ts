@@ -15,7 +15,7 @@ export const retrieveOrderSet = async (id: string) => {
     .fetch<any>(`/store/order-set/${id}`, {
       method: "GET",
       headers,
-      cache: "force-cache",
+      cache: "no-cache",
     })
     .then(({ order_set }) => order_set)
     .catch((err) => medusaError(err))
