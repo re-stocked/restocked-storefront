@@ -42,7 +42,7 @@ export const ParcelAccordionItems = ({
         onClick={openHandler}
       >
         <p className="label-md col-span-3">
-          Parcel {index}:{" "}
+          Order #{order.display_id}:{" "}
           <span className="text-primary font-semibold uppercase">
             {steps[status]}
           </span>
