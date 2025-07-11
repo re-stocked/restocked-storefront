@@ -94,7 +94,7 @@ export const retriveReturnMethods = async (order_id: string) => {
     }>(`/store/shipping-options/return?order_id=${order_id}`, {
       method: "GET",
       headers,
-      cache: "force-cache",
+      cache: "no-cache",
     })
     .then(({ shipping_options }) => shipping_options)
     .catch(() => [])

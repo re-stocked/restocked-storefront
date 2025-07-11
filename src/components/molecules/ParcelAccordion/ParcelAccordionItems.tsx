@@ -49,8 +49,8 @@ export const ParcelAccordionItems = ({
         className="grid grid-cols-2 sm:grid-cols-7 cursor-pointer hover:bg-component-secondary/40 p-4 transition-all duration-300"
         onClick={openHandler}
       >
-        <p className="label-md col-span-2">
-          Parcel {index}:{" "}
+        <p className="label-md col-span-3">
+          Order #{order.display_id}:{" "}
           <span className="text-primary font-semibold uppercase">
             {steps[status]}
           </span>
