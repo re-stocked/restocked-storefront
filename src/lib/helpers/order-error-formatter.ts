@@ -1,6 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
-
-export const orderErrorFormatter = (error: any, cart: HttpTypes.StoreCart) => {
+export const orderErrorFormatter = (error: any) => {
   if (error.message === "NEXT_REDIRECT") {
     return null
   }
