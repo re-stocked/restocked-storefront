@@ -64,10 +64,10 @@ export const createReturnRequest = async (data: any) => {
       body: JSON.stringify(data),
     }
   )
-    .then((res) => res)
+    .then(async (res) => await res.json())
     .catch((err) => medusaError(err))
 
-  return response.json()
+  return response
 }
 
 export const getReturns = async () => {
@@ -80,6 +80,7 @@ export const getReturns = async () => {
       method: "GET",
       headers,
       cache: "force-cache",
+      query: { fields: "*line_items.reason_id" },
     })
     .then((res) => res)
     .catch((err) => medusaError(err))

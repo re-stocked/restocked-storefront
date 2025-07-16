@@ -39,11 +39,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       )
     case isManual(paymentSession?.provider_id):
       return (
-        <ManualTestPaymentButton
-          notReady={notReady}
-          data-testid={dataTestId}
-          cart={cart}
-        />
+        <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
       )
     default:
       return (
@@ -164,22 +160,15 @@ const StripePaymentButton = ({
   )
 }
 
-const ManualTestPaymentButton = ({
-  notReady,
-  cart,
-}: {
-  notReady: boolean
-  cart: HttpTypes.StoreCart
-}) => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const onPaymentCompleted = async () => {
     await placeOrder().catch((err) => {
-      // setErrorMessage(orderErrorFormatter(err, cart))
-      toast.error({
-        title: "Error",
-        description: orderErrorFormatter(err, cart),
-      })
+      // toast.error({
+      //   title: "Error placing order",
+      //   description: "Please try again later",
+      // })
     })
   }
 
@@ -192,10 +181,10 @@ const ManualTestPaymentButton = ({
       <Button disabled={notReady} onClick={handlePayment} className="w-full">
         Place order
       </Button>
-      <ErrorMessage
+      {/* <ErrorMessage
         error={errorMessage}
         data-testid="manual-payment-error-message"
-      />
+      /> */}
     </>
   )
 }

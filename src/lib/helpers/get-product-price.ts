@@ -4,14 +4,15 @@ import { convertToLocale } from "./money"
 import { BaseHit, Hit } from "instantsearch.js"
 
 export const getPricesForVariant = (variant: any) => {
-  if (!variant?.calculated_price?.calculated_amount) {
+  if (!variant?.calculated_price?.calculated_amount_with_tax) {
     return null
   }
 
   return {
-    calculated_price_number: variant.calculated_price.calculated_amount,
+    calculated_price_number:
+      variant.calculated_price.calculated_amount_with_tax,
     calculated_price: convertToLocale({
-      amount: variant.calculated_price.calculated_amount,
+      amount: variant.calculated_price.calculated_amount_with_tax,
       currency_code: variant.calculated_price.currency_code,
     }),
     original_price_number: variant.calculated_price.original_amount,
@@ -48,8 +49,8 @@ export function getProductPrice({
       .filter((v: any) => !!v.calculated_price)
       .sort((a: any, b: any) => {
         return (
-          a.calculated_price.calculated_amount -
-          b.calculated_price.calculated_amount
+          a.calculated_price.calculated_amount_with_tax -
+          b.calculated_price.calculated_amount_with_tax
         )
       })[0]
   }
@@ -63,8 +64,8 @@ export function getProductPrice({
       .filter((v: any) => !!v.calculated_price)
       .sort((a: any, b: any) => {
         return (
-          a.calculated_price.calculated_amount -
-          b.calculated_price.calculated_amount
+          a.calculated_price.calculated_amount_with_tax -
+          b.calculated_price.calculated_amount_with_tax
         )
       })[0]
 
