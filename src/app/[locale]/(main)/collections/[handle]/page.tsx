@@ -15,6 +15,9 @@ const SingleCollectionsPage = async ({
 }) => {
   const { handle, locale } = await params
 
+  const isBot = /bot|crawl|spider|slurp|bing|duckduckbot/i.test(
+    navigator.userAgent
+  )
   const collection = await getCollectionByHandle(handle)
 
   if (!collection) return <NotFound />
@@ -35,7 +38,7 @@ const SingleCollectionsPage = async ({
       <h1 className="heading-xl uppercase">{collection.title}</h1>
 
       <Suspense fallback={<ProductListingSkeleton />}>
-        {!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
+        {!isBot && (!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY) ? (
           <ProductListing collection_id={collection.id} showSidebar />
         ) : (
           <AlgoliaProductsListing

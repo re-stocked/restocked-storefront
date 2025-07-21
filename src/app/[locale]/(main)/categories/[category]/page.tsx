@@ -39,6 +39,10 @@ async function Category({
     return notFound()
   }
 
+  const isBot = /bot|crawl|spider|slurp|bing|duckduckbot/i.test(
+    navigator.userAgent
+  )
+
   const breadcrumbsItems = [
     {
       path: category?.handle,
@@ -55,7 +59,7 @@ async function Category({
       <h1 className="heading-xl uppercase">{category.name}</h1>
 
       <Suspense fallback={<ProductListingSkeleton />}>
-        {!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
+        {!isBot && (!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY) ? (
           <ProductListing category_id={category.id} showSidebar />
         ) : (
           <AlgoliaProductsListing category_id={category.id} locale={locale} />

@@ -15,6 +15,10 @@ async function AllCategories({
 }) {
   const { locale } = await params
 
+  const isBot = /bot|crawl|spider|slurp|bing|duckduckbot/i.test(
+    navigator.userAgent
+  )
+
   const breadcrumbsItems = [
     {
       path: "/",
@@ -33,7 +37,7 @@ async function AllCategories({
       <h1 className="heading-xl uppercase">All Products</h1>
 
       <Suspense fallback={<ProductListingSkeleton />}>
-        {!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
+        {!isBot && (!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY) ? (
           <ProductListing showSidebar locale={locale} />
         ) : (
           <AlgoliaProductsListing
