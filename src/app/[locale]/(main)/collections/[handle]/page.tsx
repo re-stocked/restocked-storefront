@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/atoms"
 import { ProductListingSkeleton } from "@/components/organisms/ProductListingSkeleton/ProductListingSkeleton"
 import { AlgoliaProductsListing, ProductListing } from "@/components/sections"
 import { getCollectionByHandle } from "@/lib/data/collections"
+import isBot from "@/lib/helpers/isBot"
 import { Suspense } from "react"
 
 const ALGOLIA_ID = process.env.NEXT_PUBLIC_ALGOLIA_ID
@@ -15,9 +16,7 @@ const SingleCollectionsPage = async ({
 }) => {
   const { handle, locale } = await params
 
-  const isBot = /bot|crawl|spider|slurp|bing|duckduckbot/i.test(
-    navigator.userAgent
-  )
+  const bot = isBot(navigator.userAgent)
   const collection = await getCollectionByHandle(handle)
 
   if (!collection) return <NotFound />
@@ -38,7 +37,7 @@ const SingleCollectionsPage = async ({
       <h1 className="heading-xl uppercase">{collection.title}</h1>
 
       <Suspense fallback={<ProductListingSkeleton />}>
-        {!isBot && (!ALGOLIA_ID || !ALGOLIA_SEARCH_KEY) ? (
+        {bot || !ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
           <ProductListing collection_id={collection.id} showSidebar />
         ) : (
           <AlgoliaProductsListing
