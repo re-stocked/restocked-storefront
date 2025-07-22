@@ -39,9 +39,9 @@ export const getPricesForVariant = (variant: any) => {
       amount: variant.calculated_price.calculated_amount_with_tax,
       currency_code: variant.calculated_price.currency_code,
     }),
-    original_price_number: variant.calculated_price.original_amount,
+    original_price_number: variant.calculated_price.original_amount_with_tax,
     original_price: convertToLocale({
-      amount: variant.calculated_price.original_amount,
+      amount: variant.calculated_price.original_amount_with_tax,
       currency_code: variant.calculated_price.currency_code,
     }),
     currency_code: variant.calculated_price.currency_code,
