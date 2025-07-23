@@ -40,6 +40,11 @@ export const CartDropdown = ({
     currency_code: cart?.currency_code || "eur",
   })
 
+  const items = convertToLocale({
+    amount: cart?.item_subtotal || 0,
+    currency_code: cart?.currency_code || "eur",
+  })
+
   useEffect(() => {
     if (open) {
       const timeout = setTimeout(() => {
@@ -90,6 +95,9 @@ export const CartDropdown = ({
                   ))}
                 </div>
                 <div className="pt-4">
+                  <div className="text-secondary flex justify-between items-center">
+                    Items <p className="label-md text-primary">{items}</p>
+                  </div>
                   <div className="text-secondary flex justify-between items-center">
                     Delivery <p className="label-md text-primary">{delivery}</p>
                   </div>
