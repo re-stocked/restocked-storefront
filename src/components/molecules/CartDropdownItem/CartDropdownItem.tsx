@@ -15,7 +15,7 @@ export const CartDropdownItem = ({
   })
 
   const total = convertToLocale({
-    amount: item.total,
+    amount: item.subtotal,
     currency_code,
   })
 

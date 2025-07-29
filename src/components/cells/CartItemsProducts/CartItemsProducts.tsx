@@ -22,7 +22,7 @@ export const CartItemsProducts = ({
         const { options } = product.variant ?? {}
 
         const total = convertToLocale({
-          amount: product.total,
+          amount: product.subtotal,
           currency_code,
         })
 
