@@ -34,7 +34,11 @@ export const AlgoliaProductsListing = ({
   const searchParamas = useSearchParams()
 
   const facetFilters: string = getFacedFilters(searchParamas)
+  console.log("facetFilters", facetFilters)
   const query: string = searchParamas.get("query") || ""
+
+  console.log({ category_id, collection_id, seller_handle, locale, currency_code })
+
 
   const filters = `${
     seller_handle

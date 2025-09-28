@@ -11,6 +11,8 @@ const getOption = (label: string) => {
       return "variants.condition"
     case "rating":
       return "average_rating"
+    case "collection":
+      return "collection.title"
     default:
       return ""
   }

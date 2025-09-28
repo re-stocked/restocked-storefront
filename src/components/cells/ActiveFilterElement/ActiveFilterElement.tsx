@@ -13,6 +13,7 @@ const filtersLabels = {
   query: "Search",
   condition: "Condition",
   rating: "Rating",
+  collection: "Collection",
 }
 
 export const ActiveFilterElement = ({ filter }: { filter: string[] }) => {

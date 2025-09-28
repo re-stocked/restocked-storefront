@@ -21,10 +21,11 @@ export const AlgoliaProductSidebar = () => {
   return (
     <div>
       <PriceFilter />
-      <SizeFilter />
+      <CollectionFilter />
+{/*        <SizeFilter />
       <ColorFilter />
       <ConditionFilter />
-      <RatingFilter />
+      <RatingFilter /> */}
     </div>
   )
 }
@@ -220,3 +221,35 @@ function RatingFilter() {
     </Accordion>
   )
 }
+
+function CollectionFilter() {
+  const { items } = useRefinementList({
+    attribute: "collection.title",
+    limit: 100,
+    operator: "or",
+  })
+
+  const { updateFilters, isFilterActive } = useFilters("collection")
+
+  const selectHandler = (option: string) => {
+    updateFilters(option)
+  }
+
+  return (
+    <Accordion heading="Collection">
+      <ul className="px-4">
+        {items.map(({ label, count }) => (
+          <li key={label} className="mb-4">
+            <FilterCheckboxOption
+              checked={isFilterActive(label)}
+              disabled={Boolean(!count)}
+              onCheck={selectHandler}
+              label={label}
+            />
+          </li>
+        ))}
+      </ul>
+    </Accordion>
+  )
+}
+export default AlgoliaProductSidebar
