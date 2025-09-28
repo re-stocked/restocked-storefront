@@ -44,8 +44,8 @@ export default async function Home({
     <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start text-primary">
       <Hero
         image="/images/hero/Image.jpg"
-        heading="Snag your style in a flash"
-        paragraph="Buy, sell, and discover pre-loved gems from the trendiest brands."
+        heading="The right parts, right on time"
+        paragraph="Buy, sell, and source essential components for heavy machinery with quality and reliability."
         buttons={[
           { label: "Buy now", path: "/categories" },
           {
