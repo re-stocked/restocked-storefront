@@ -64,9 +64,9 @@ export default async function Home({
       <div className="px-4 lg:px-8 w-full">
         <HomeCategories heading="SHOP BY CATEGORY" />
       </div>
-      <BannerSection />
-      <ShopByStyleSection />
-      <BlogSection />
+      {/* <BannerSection /> */}
+      {/* <ShopByStyleSection /> */}
+      {/* <BlogSection /> */}
     </main>
   )
 }
