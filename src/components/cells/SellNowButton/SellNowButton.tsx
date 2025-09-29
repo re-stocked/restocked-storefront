@@ -6,9 +6,7 @@ export const SellNowButton = () => {
   return (
     <Link
       href={
-        process.env.NEXT_PUBLIC_ALGOLIA_ID === "UO3C5Y8NHX"
-          ? "https://vendor-sandbox.vercel.app/"
-          : "https://vendor.mercurjs.com"
+        process.env.VITE_MEDUSA_VENDOR_URL
       }
     >
       <Button className="group uppercase !font-bold pl-12 gap-1 flex items-center">

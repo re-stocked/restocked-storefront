@@ -50,10 +50,7 @@ export default async function Home({
           { label: "Buy now", path: "/categories" },
           {
             label: "Sell now",
-            path:
-              process.env.NEXT_PUBLIC_ALGOLIA_ID === "UO3C5Y8NHX"
-                ? "https://vendor-sandbox.vercel.app/"
-                : "https://vendor.mercurjs.com",
+            path: process.env.VITE_MEDUSA_VENDOR_URL 
           },
         ]}
       />
