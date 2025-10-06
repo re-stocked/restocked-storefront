@@ -10,7 +10,6 @@ export const Cart = async () => {
 
   const emptyCart = !cart?.items?.length
 
-
   if (emptyCart) {
     return (
       <div className="col-span-12">
