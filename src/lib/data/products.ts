@@ -19,7 +19,7 @@ export const listProducts = async ({
   pageParam?: number
   queryParams?: HttpTypes.FindParams &
     HttpTypes.StoreProductParams & {
-      handle?: string
+      handle?: string[]
     }
   category_id?: string
   collection_id?: string

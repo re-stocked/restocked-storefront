@@ -12,7 +12,7 @@ export async function generateMetadata({
 
   const prod = await listProducts({
     countryCode: locale,
-    queryParams: { handle },
+    queryParams: { handle: [handle] },
   }).then(({ response }) => response.products[0])
 
   return generateProductMetadata(prod)
