@@ -24,6 +24,7 @@ export const Cart = async () => {
             total={cart?.total || 0}
             currency_code={cart?.currency_code || ""}
             tax={cart?.tax_total || 0}
+            discount_total={cart?.discount_total || 0}
           />
           <LocalizedClientLink href="/checkout?step=address">
             <Button className="w-full py-3 flex justify-center items-center">
