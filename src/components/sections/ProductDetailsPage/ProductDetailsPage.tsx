@@ -12,7 +12,7 @@ export const ProductDetailsPage = async ({
 }) => {
   const prod = await listProducts({
     countryCode: locale,
-    queryParams: { handle },
+    queryParams: { handle: [handle] },
   }).then(({ response }) => response.products[0])
 
   if (!prod) return null
