@@ -16,13 +16,22 @@ export const CartItemsProducts = ({
   delete_item?: boolean
   change_quantity?: boolean
 }) => {
+  // Filter out items with invalid data (e.g., no price)
+  const validProducts = products.filter((product) => {
+    return (
+      product.subtotal !== null &&
+      product.subtotal !== undefined &&
+      product.variant !== null
+    )
+  })
+
   return (
     <div>
-      {products.map((product) => {
+      {validProducts.map((product) => {
         const { options } = product.variant ?? {}
 
         const total = convertToLocale({
-          amount: product.subtotal,
+          amount: product.subtotal ?? 0,
           currency_code,
         })
 

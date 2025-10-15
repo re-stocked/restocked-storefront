@@ -25,6 +25,15 @@ export const CartDropdown = ({
   const cartItemsCount = (cart && getItemCount(cart)) || 0
   const pathname = usePathname()
 
+  // Filter out items with invalid data
+  const validItems = cart?.items?.filter((item) => {
+    return (
+      item.subtotal !== null &&
+      item.subtotal !== undefined &&
+      item.variant !== null
+    )
+  }) || []
+
   const total = convertToLocale({
     amount: cart?.total || 0,
     currency_code: cart?.currency_code || "eur",
@@ -90,11 +99,11 @@ export const CartDropdown = ({
             {Boolean(cartItemsCount) ? (
               <div>
                 <div className="overflow-y-scroll max-h-[360px] no-scrollbar">
-                  {cart?.items?.map((item) => (
+                  {validItems.map((item) => (
                     <CartDropdownItem
                       key={item.id}
                       item={item}
-                      currency_code={cart.currency_code}
+                      currency_code={cart?.currency_code || "eur"}
                     />
                   ))}
                 </div>
