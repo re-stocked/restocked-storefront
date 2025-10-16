@@ -485,54 +485,55 @@ export async function updateRegionWithValidation(
     }
 
     try {
-      // Try to update cart region
       await updateCart({ region_id: region.id })
     } catch (error: any) {
       // Check if error is about variants not having prices
-      if (error?.message?.includes("do not have a price")) {
-        // Parse variant IDs from error message
-        const problematicVariantIds = parseVariantIdsFromError(error.message)
-
-        if (problematicVariantIds.length > 0) {
-          // Fetch cart with minimal fields to get items
-          try {
-            const { cart } = await sdk.client.fetch<HttpTypes.StoreCartResponse>(
-              `/store/carts/${cartId}`,
-              {
-                method: "GET",
-                query: {
-                  fields: "*items",
-                },
-                headers,
-                cache: "no-cache",
-              }
-            )
-
-            // Find and remove items with problematic variants
-            if (cart?.items) {
-              for (const item of cart.items) {
-                if (item.variant_id && problematicVariantIds.includes(item.variant_id)) {
-                  try {
-                    await sdk.store.cart.deleteLineItem(cart.id, item.id, headers)
-                    removedItems.push(item.product_title || "Unknown product")
-                  } catch (deleteError) {
-                    // Silent failure - item removal failed but continue
-                  }
-                }
-              }
-            }
-
-            // Retry region update after removing problematic items
-            if (removedItems.length > 0) {
-              await updateCart({ region_id: region.id })
-            }
-          } catch (fetchError) {
-            throw new Error("Failed to handle incompatible cart items")
-          }
-        }
-      } else {
+      if (!error?.message?.includes("do not have a price")) {
         // Re-throw if it's a different error
         throw error
+      }
+
+      // Parse variant IDs from error message
+      const problematicVariantIds = parseVariantIdsFromError(error.message)
+
+      // Early return if no variant IDs found
+      if (!problematicVariantIds.length) {
+        throw new Error("Failed to parse variant IDs from error")
+      }
+
+      // Fetch cart with minimal fields to get items
+      try {
+        const { cart } = await sdk.client.fetch<HttpTypes.StoreCartResponse>(
+          `/store/carts/${cartId}`,
+          {
+            method: "GET",
+            query: {
+              fields: "*items",
+            },
+            headers,
+            cache: "no-cache",
+          }
+        )
+
+        // Iterate over problematic variants and remove corresponding items
+        for (const variantId of problematicVariantIds) {
+          const item = cart?.items?.find(item => item.variant_id === variantId)
+          if (item) {
+            try {
+              await sdk.store.cart.deleteLineItem(cart.id, item.id, headers)
+              removedItems.push(item.product_title || "Unknown product")
+            } catch (deleteError) {
+              // Silent failure - item removal failed but continue
+            }
+          }
+        }
+
+        // Retry region update after removing problematic items
+        if (removedItems.length > 0) {
+          await updateCart({ region_id: region.id })
+        }
+      } catch (fetchError) {
+        throw new Error("Failed to handle incompatible cart items")
       }
     }
 
