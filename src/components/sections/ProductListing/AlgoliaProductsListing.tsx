@@ -87,6 +87,7 @@ const ProductsListing = ({
           fields:
             "*variants.calculated_price,*seller.reviews,-thumbnail,-images,-type,-tags,-variants.options,-options,-collection,-collection_id",
           handle: items.map((item) => item.handle),
+          limit: items.length,
         },
       })
 
