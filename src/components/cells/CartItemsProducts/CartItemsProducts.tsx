@@ -57,7 +57,8 @@ export const CartItemsProducts = ({
                 >
                   <div className="w-[100px] md:w-[200px] lg:w-[280px] mb-4 lg:mb-0">
                     <h3 className="heading-xs uppercase truncate">
-                      {product.subtitle}
+                      {product.product_title}
+                      {product.subtitle && ` - ${product.subtitle}`}
                     </h3>
                   </div>
                 </LocalizedClientLink>
