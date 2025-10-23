@@ -23,9 +23,7 @@ export async function fetchQuery(
   const params = Object.entries(query || {}).reduce(
     (acc, [key, value], index) => {
       if (value && value !== undefined) {
-        const queryLength = Object.values(query || {}).filter(
-          (i) => i && i !== undefined
-        ).length
+        const queryLength = Object.values(query || {}).filter((i) => !!i).length
         acc += `${key}=${value}${index + 1 <= queryLength ? "&" : ""}`
       }
       return acc
