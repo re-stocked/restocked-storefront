@@ -142,7 +142,8 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
       }
     } catch (error: any) {
       setError(
-        error?.message?.replace("Error setting up the request: ", "") || ""
+        error?.message?.replace("Error setting up the request: ", "") ||
+          "An error occurred"
       )
     } finally {
       setIsLoadingPrices(false)
