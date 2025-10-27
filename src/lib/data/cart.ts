@@ -185,7 +185,7 @@ export async function updateLineItem({
   }
 
   const res = await fetchQuery(`/store/carts/${cartId}/line-items/${lineId}`, {
-    body: JSON.stringify({ quantity }),
+    body: { quantity },
     method: "POST",
     headers,
   })
