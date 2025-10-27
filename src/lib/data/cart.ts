@@ -139,11 +139,11 @@ export async function addToCart({
         {},
         headers
       )
-      .then(async () => {
+      .catch(medusaError)
+      .finally(async () => {
         const cartCacheTag = await getCacheTag("carts")
         revalidateTag(cartCacheTag)
       })
-      .catch(medusaError)
   } else {
     await sdk.store.cart
       .createLineItem(
@@ -160,6 +160,10 @@ export async function addToCart({
         revalidateTag(cartCacheTag)
       })
       .catch(medusaError)
+      .finally(async () => {
+        const cartCacheTag = await getCacheTag("carts")
+        revalidateTag(cartCacheTag)
+      })
   }
 }
 
