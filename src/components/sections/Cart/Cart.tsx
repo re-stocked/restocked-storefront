@@ -1,5 +1,5 @@
 import { Button } from "@/components/atoms"
-import { CartItems, CartSummary } from "@/components/organisms"
+import { CartEmpty, CartItems, CartSummary } from "@/components/organisms"
 import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { retrieveCart } from "@/lib/data/cart"
 import CartPromotionCode from "../CartReview/CartPromotionCode"
@@ -8,14 +8,8 @@ import { EmptyCart } from "@/components/organisms/CartItems/EmptyCart"
 export const Cart = async () => {
   const cart = await retrieveCart()
 
-  const emptyCart = !cart?.items?.length
-
-  if (emptyCart) {
-    return (
-      <div className="col-span-12">
-        <EmptyCart />
-      </div>
-    )
+  if (!cart || !cart.items?.length) {
+    return <CartEmpty />
   }
 
   return (
@@ -35,6 +29,7 @@ export const Cart = async () => {
             total={cart?.total || 0}
             currency_code={cart?.currency_code || ""}
             tax={cart?.tax_total || 0}
+            discount_total={cart?.discount_total || 0}
           />
           <LocalizedClientLink href="/checkout?step=address">
             <Button className="w-full py-3 flex justify-center items-center">

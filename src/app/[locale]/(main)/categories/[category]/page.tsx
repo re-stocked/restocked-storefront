@@ -9,7 +9,7 @@ import { notFound } from "next/navigation"
 import isBot from "@/lib/helpers/isBot"
 import { headers } from "next/headers"
 import Script from "next/script"
-import { listRegions } from "@/lib/data/regions"
+import { getRegion, listRegions } from "@/lib/data/regions"
 import { listProducts } from "@/lib/data/products"
 import { toHreflang } from "@/lib/helpers/hreflang"
 
@@ -94,7 +94,7 @@ async function Category({
   if (!category) {
     return notFound()
   }
-
+  const currency_code = (await getRegion(locale))?.currency_code || "usd"
   const ua = (await headers()).get("user-agent") || ""
   const bot = isBot(ua)
 
@@ -166,7 +166,11 @@ async function Category({
         {bot || !ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
           <ProductListing category_id={category.id} showSidebar />
         ) : (
-          <AlgoliaProductsListing category_id={category.id} locale={locale} />
+          <AlgoliaProductsListing
+            category_id={category.id}
+            locale={locale}
+            currency_code={currency_code}
+          />
         )}
       </Suspense>
     </main>
