@@ -174,12 +174,12 @@ export default async function Home({
           },
         ]}
       />
-      <div className="px-4 lg:px-8 w-full">
+{/*       <div className="px-4 lg:px-8 w-full">
         <HomeProductSection heading="trending listings" locale={locale} home />
       </div>
       <div className="px-4 lg:px-8 w-full">
         <HomeCategories heading="SHOP BY CATEGORY" />
-      </div>
+      </div> */}
 {/*       <BannerSection />
       <ShopByStyleSection />
       <BlogSection /> */}
