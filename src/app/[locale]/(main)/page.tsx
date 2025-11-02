@@ -162,8 +162,8 @@ export default async function Home({
 
       <Hero
         image="/images/hero/Image.jpg"
-        heading="Snag your style in a flash"
-        paragraph="Buy, sell, and discover pre-loved gems from the trendiest brands."
+        heading="The right parts, right on time"
+        paragraph="Buy, sell, and source essential components for heavy machinery with quality and reliability."
         buttons={[
           { label: "Buy now", path: "/categories" },
           {
@@ -180,9 +180,9 @@ export default async function Home({
       <div className="px-4 lg:px-8 w-full">
         <HomeCategories heading="SHOP BY CATEGORY" />
       </div>
-      <BannerSection />
+{/*       <BannerSection />
       <ShopByStyleSection />
-      <BlogSection />
+      <BlogSection /> */}
     </main>
   )
 }

@@ -47,9 +47,11 @@ export const AlgoliaProductSidebar = () => {
                 allSearchParams.min_price || allSearchParams.max_price
               )}
             />
-            <SizeFilter defaultOpen={Boolean(allSearchParams.size)} />
+            <CollectionFilter />
+
+{/*         <SizeFilter defaultOpen={Boolean(allSearchParams.size)} />
             <ColorFilter defaultOpen={Boolean(allSearchParams.color)} />
-            <ConditionFilter defaultOpen={Boolean(allSearchParams.condition)} />
+            <ConditionFilter defaultOpen={Boolean(allSearchParams.condition)} /> */}
           </div>
         </Modal>
       )}
@@ -57,11 +59,44 @@ export const AlgoliaProductSidebar = () => {
   ) : (
     <div>
       <PriceFilter />
-      <SizeFilter />
+      <CollectionFilter />
+
+{/*       <SizeFilter />
       <ColorFilter />
-      <ConditionFilter />
+      <ConditionFilter /> */}
       {/* <RatingFilter /> */}
     </div>
+  )
+}
+
+function CollectionFilter() {
+  const { items } = useRefinementList({
+    attribute: "collection.title",
+    limit: 100,
+    operator: "or",
+  })
+
+  const { updateFilters, isFilterActive } = useFilters("collection")
+
+  const selectHandler = (option: string) => {
+    updateFilters(option)
+  }
+
+  return (
+    <Accordion heading="Collection">
+      <ul className="px-4">
+        {items.map(({ label, count }) => (
+          <li key={label} className="mb-4">
+            <FilterCheckboxOption
+              checked={isFilterActive(label)}
+              disabled={Boolean(!count)}
+              onCheck={selectHandler}
+              label={label}
+            />
+          </li>
+        ))}
+      </ul>
+    </Accordion>
   )
 }
 
