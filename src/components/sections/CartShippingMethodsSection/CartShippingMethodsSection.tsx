@@ -183,6 +183,8 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
     )
     .map((item) => item.product?.seller?.name)
 
+  const isEditEnabled = !isOpen && !!cart?.shipping_methods?.length
+
   return (
     <div className="border p-4 rounded-sm bg-ui-bg-interactive">
       {/* {missingModal && (
@@ -222,7 +224,7 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
           )}
           Delivery
         </Heading>
-        {!isOpen && !!cart?.shipping_methods?.length && (
+        {isEditEnabled && (
           <Text>
             <Button onClick={handleEdit} variant="tonal">
               Edit
