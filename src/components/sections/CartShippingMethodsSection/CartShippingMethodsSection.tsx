@@ -1,7 +1,7 @@
 "use client"
 
 import ErrorMessage from "@/components/molecules/ErrorMessage/ErrorMessage"
-import { setShippingMethod } from "@/lib/data/cart"
+import { removeShippingMethod, setShippingMethod } from "@/lib/data/cart"
 import { calculatePriceForShippingOption } from "@/lib/data/fulfillment"
 import { convertToLocale } from "@/lib/helpers/money"
 import { CheckCircleSolid, ChevronUpDown, Loader } from "@medusajs/icons"
@@ -58,6 +58,8 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
   availableShippingMethods,
 }) => {
   const [isLoadingPrices, setIsLoadingPrices] = useState(false)
+  const [isRemovingShippingMethod, setIsRemovingShippingMethod] =
+    useState(false)
   const [calculatedPricesMap, setCalculatedPricesMap] = useState<
     Record<string, number>
   >({})
@@ -147,6 +149,12 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
     } finally {
       setIsLoadingPrices(false)
     }
+  }
+
+  const handleRemoveShippingMethod = async (methodId: string) => {
+    setIsRemovingShippingMethod(true)
+    await removeShippingMethod(methodId)
+    setIsRemovingShippingMethod(false)
   }
 
   useEffect(() => {
@@ -315,13 +323,14 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
                     </div>
                   )
                 })}
-                {cart && (cart.shipping_methods?.length ?? 0) > 0 && (
+                {!!cart?.shipping_methods?.length && (
                   <div className="flex flex-col">
                     {cart.shipping_methods?.map((method) => (
                       <CartShippingMethodRow
                         key={method.id}
                         method={method}
                         currency_code={cart.currency_code}
+                        onRemoveShippingMethod={handleRemoveShippingMethod}
                       />
                     ))}
                   </div>
@@ -337,7 +346,7 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
             <Button
               onClick={handleSubmit}
               variant="tonal"
-              disabled={!cart.shipping_methods?.[0]}
+              disabled={!cart.shipping_methods?.[0] || isRemovingShippingMethod}
               loading={isLoadingPrices}
             >
               Continue to payment
