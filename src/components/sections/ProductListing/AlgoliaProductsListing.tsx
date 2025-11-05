@@ -80,6 +80,7 @@ const ProductsListing = ({
   const [apiProducts, setApiProducts] = useState<
     HttpTypes.StoreProduct[] | null
   >(null)
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false)
   const { items, results } = useHits()
 
   const searchParams = useSearchParams()
@@ -91,7 +92,7 @@ const ProductsListing = ({
 
   async function handleSetProducts() {
     try {
-      setApiProducts(null)
+      setIsLoadingProducts(true)
       const { response } = await listProducts({
         countryCode: locale,
         queryParams: {
@@ -110,16 +111,23 @@ const ProductsListing = ({
       )
     } catch (error) {
       setApiProducts(null)
+    } finally {
+      setIsLoadingProducts(false)
     }
   }
 
   useEffect(() => {
     if (items.length > 0) {
       handleSetProducts()
+    } else {
+      setApiProducts([])
+      setIsLoadingProducts(false)
     }
   }, [itemsKey])
 
   if (!results?.processingTimeMS) return <ProductListingSkeleton />
+
+  const isLoading = isLoadingProducts && items.length > 0
 
   const filteredProducts = items.filter((pr) =>
     apiProducts?.some((p) => p.id === pr.objectID)
@@ -184,7 +192,24 @@ const ProductsListing = ({
           <AlgoliaProductSidebar />
         </div>
         <div className="w-full">
-          {!items.length ? (
+          {isLoading ? (
+            <div className="flex flex-wrap gap-4">
+              {Array.from({ length: PRODUCT_LIMIT }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="relative border rounded-sm flex flex-col justify-between p-1 w-full lg:w-[calc(25%-1rem)] min-w-[250px]"
+                >
+                  <div className="relative w-full bg-gray-200 aspect-square animate-pulse rounded-sm" />
+                  <div className="flex justify-between p-4">
+                    <div className="w-full space-y-2">
+                      <div className="h-5 bg-gray-200 rounded animate-pulse w-3/4" />
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : !items.length ? (
             <div className="text-center w-full my-10">
               <h2 className="uppercase text-primary heading-lg">no results</h2>
               <p className="mt-4 text-lg">
