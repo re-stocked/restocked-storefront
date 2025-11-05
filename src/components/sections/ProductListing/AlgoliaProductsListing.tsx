@@ -81,40 +81,15 @@ const ProductsListing = ({
   async function handleSetProducts() {
     try {
       setApiProducts(null)
-      
-      const handles = items.map((item) => item.handle)
-      console.log("🔍 Handles to fetch:", handles)
-      console.log("🔍 Locale:", locale)
-      
-      // Test 1: Try WITHOUT country_code filter
-      console.log("🔍 TEST 1: Fetching WITHOUT countryCode filter...")
-      const testResponse = await listProducts({
-        queryParams: {
-          fields:
-            "*variants.calculated_price,*seller.reviews,-thumbnail,-images,-type,-tags,-variants.options,-options,-collection,-collection_id",
-          handle: handles,
-          limit: items.length,
-        },
-      }).catch(e => {
-        console.log("❌ Test 1 failed:", e)
-        return { response: { products: [], count: 0 }, nextPage: null }
-      })
-      
-      console.log("🔍 Test 1 Response (no country filter):", testResponse.response)
-      
-      // Test 2: Try WITH country_code filter
-      console.log("🔍 TEST 2: Fetching WITH countryCode filter...")
       const { response } = await listProducts({
         countryCode: locale,
         queryParams: {
           fields:
             "*variants.calculated_price,*seller.reviews,-thumbnail,-images,-type,-tags,-variants.options,-options,-collection,-collection_id",
-          handle: handles,
+          handle: items.map((item) => item.handle),
           limit: items.length,
         },
       })
-
-      console.log("🔍 Test 2 Response (with country filter):", response)
 
       setApiProducts(
         response.products.filter((prod) => {
@@ -123,7 +98,6 @@ const ProductsListing = ({
         })
       )
     } catch (error) {
-      console.error("❌ Error:", error)
       setApiProducts(null)
     }
   }
