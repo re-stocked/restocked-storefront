@@ -109,20 +109,28 @@ const ProductsListing = ({
   if (!results?.processingTimeMS) return <ProductListingSkeleton />
 
   const page: number = +(searchParamas.get("page") || 1)
+  
+  // First filter products that exist in API response
   const filteredProducts = items.filter((pr) =>
     apiProducts?.some((p: any) => p.id === pr.objectID)
   )
 
-  const products = filteredProducts
-    .filter((pr) =>
-      apiProducts?.some(
-        (p: any) => p.id === pr.objectID && filterProductsByCurrencyCode(p)
-      )
+  // Then apply currency code filter
+  const productsWithCurrency = filteredProducts.filter((pr) =>
+    apiProducts?.some(
+      (p: any) => p.id === pr.objectID && filterProductsByCurrencyCode(p)
     )
-    .slice((page - 1) * PRODUCT_LIMIT, page * PRODUCT_LIMIT)
+  )
 
-  const count = filteredProducts?.length || 0
+  // Calculate pagination based on filtered products
+  const count = productsWithCurrency?.length || 0
   const pages = Math.ceil(count / PRODUCT_LIMIT) || 1
+
+  // Apply pagination slice
+  const products = productsWithCurrency.slice(
+    (page - 1) * PRODUCT_LIMIT,
+    page * PRODUCT_LIMIT
+  )
 
   function filterProductsByCurrencyCode(product: HttpTypes.StoreProduct) {
     const minPrice = searchParamas.get("min_price")
