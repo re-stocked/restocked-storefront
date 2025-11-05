@@ -17,6 +17,7 @@ import { ProductListingSkeleton } from "@/components/organisms/ProductListingSke
 import { useEffect, useMemo, useState } from "react"
 import { listProducts } from "@/lib/data/products"
 import { getProductPrice } from "@/lib/helpers/get-product-price"
+import { SkeletonProductCard } from "@/components/organisms/ProductCard/SkeletonProductCard"
 
 export const AlgoliaProductsListing = ({
   category_id,
@@ -195,18 +196,7 @@ const ProductsListing = ({
           {isLoading ? (
             <div className="flex flex-wrap gap-4">
               {Array.from({ length: PRODUCT_LIMIT }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="relative border rounded-sm flex flex-col justify-between p-1 w-full lg:w-[calc(25%-1rem)] min-w-[250px]"
-                >
-                  <div className="relative w-full bg-gray-200 aspect-square animate-pulse rounded-sm" />
-                  <div className="flex justify-between p-4">
-                    <div className="w-full space-y-2">
-                      <div className="h-5 bg-gray-200 rounded animate-pulse w-3/4" />
-                      <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
-                    </div>
-                  </div>
-                </div>
+                <SkeletonProductCard key={idx} />
               ))}
             </div>
           ) : !items.length ? (
