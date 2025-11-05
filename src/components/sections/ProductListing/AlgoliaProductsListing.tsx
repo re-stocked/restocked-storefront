@@ -76,41 +76,36 @@ const ProductsListing = ({
   >(null)
   const { items, results } = useHits()
 
-  console.log("🔍 Algolia items:", items)
-  console.log("🔍 Algolia results:", results)
-
   const searchParamas = useSearchParams()
 
   async function handleSetProducts() {
     try {
       setApiProducts(null)
+      
+      const handles = items.map((item) => item.handle)
+      console.log("🔍 Handles to fetch:", handles)
+      console.log("🔍 Locale:", locale)
+      
       const { response } = await listProducts({
         countryCode: locale,
         queryParams: {
           fields:
             "*variants.calculated_price,*seller.reviews,-thumbnail,-images,-type,-tags,-variants.options,-options,-collection,-collection_id",
-          handle: items.map((item) => item.handle),
+          handle: handles,
           limit: items.length,
         },
       })
 
-      console.log("🔍 API Response products:", response.products)
-      console.log("🔍 Number of products from API:", response.products.length)
+      console.log("🔍 API Response:", response)
 
-      const filteredProducts = response.products.filter((prod) => {
-        const { cheapestPrice } = getProductPrice({ product: prod })
-        console.log(`🔍 Product ${prod.handle}:`, {
-          hasVariants: !!prod.variants?.length,
-          variants: prod.variants,
-          cheapestPrice,
+      setApiProducts(
+        response.products.filter((prod) => {
+          const { cheapestPrice } = getProductPrice({ product: prod })
+          return Boolean(cheapestPrice) && prod
         })
-        return Boolean(cheapestPrice) && prod
-      })
-
-      console.log("🔍 Filtered products:", filteredProducts.length)
-      setApiProducts(filteredProducts)
+      )
     } catch (error) {
-      console.error("❌ Error fetching products:", error)
+      console.error("❌ Error:", error)
       setApiProducts(null)
     }
   }
@@ -122,28 +117,20 @@ const ProductsListing = ({
   if (!results?.processingTimeMS) return <ProductListingSkeleton />
 
   const page: number = +(searchParamas.get("page") || 1)
-  
-  // First filter products that exist in API response
   const filteredProducts = items.filter((pr) =>
     apiProducts?.some((p: any) => p.id === pr.objectID)
   )
 
-  // Then apply currency code filter
-  const productsWithCurrency = filteredProducts.filter((pr) =>
-    apiProducts?.some(
-      (p: any) => p.id === pr.objectID && filterProductsByCurrencyCode(p)
+  const products = filteredProducts
+    .filter((pr) =>
+      apiProducts?.some(
+        (p: any) => p.id === pr.objectID && filterProductsByCurrencyCode(p)
+      )
     )
-  )
+    .slice((page - 1) * PRODUCT_LIMIT, page * PRODUCT_LIMIT)
 
-  // Calculate pagination based on filtered products
-  const count = productsWithCurrency?.length || 0
+  const count = filteredProducts?.length || 0
   const pages = Math.ceil(count / PRODUCT_LIMIT) || 1
-
-  // Apply pagination slice
-  const products = productsWithCurrency.slice(
-    (page - 1) * PRODUCT_LIMIT,
-    page * PRODUCT_LIMIT
-  )
 
   function filterProductsByCurrencyCode(product: HttpTypes.StoreProduct) {
     const minPrice = searchParamas.get("min_price")

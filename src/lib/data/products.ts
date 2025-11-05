@@ -64,29 +64,40 @@ export const listProducts = async ({
 
   const useCached = forceCache || (limit <= 8 && !category_id && !collection_id)
 
+  const queryObject = {
+    country_code: countryCode,
+    category_id,
+    collection_id,
+    limit,
+    offset,
+    region_id: region?.id,
+    fields:
+      "*variants.calculated_price,+variants.inventory_quantity,*seller,*variants,*seller.products," +
+      "*seller.reviews,*seller.reviews.customer,*seller.reviews.seller,*seller.products.variants,*attribute_values,*attribute_values.attribute",
+    ...queryParams,
+  }
+
+  console.log("🔍 [listProducts] Query object:", queryObject)
+  console.log("🔍 [listProducts] URL:", `/store/products`)
+
   return sdk.client
     .fetch<{
       products: (HttpTypes.StoreProduct & { seller?: SellerProps })[]
       count: number
     }>(`/store/products`, {
       method: "GET",
-      query: {
-        country_code: countryCode,
-        category_id,
-        collection_id,
-        limit,
-        offset,
-        region_id: region?.id,
-        fields:
-          "*variants.calculated_price,+variants.inventory_quantity,*seller,*variants,*seller.products," +
-          "*seller.reviews,*seller.reviews.customer,*seller.reviews.seller,*seller.products.variants,*attribute_values,*attribute_values.attribute",
-        ...queryParams,
-      },
+      query: queryObject,
       headers,
       next: useCached ? { revalidate: 60 } : undefined,
       cache: useCached ? "force-cache" : "no-cache",
     })
     .then(({ products: productsRaw, count }) => {
+      console.log("🔍 [listProducts] Response:", {
+        count,
+        productsCount: productsRaw.length,
+        products: productsRaw.map(p => ({ id: p.id, handle: p.handle, title: p.title }))
+      })
+      
       const products = productsRaw.filter(
         (product) => product.seller?.store_status !== "SUSPENDED"
       )
