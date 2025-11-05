@@ -76,6 +76,9 @@ const ProductsListing = ({
   >(null)
   const { items, results } = useHits()
 
+  console.log("🔍 Algolia items:", items)
+  console.log("🔍 Algolia results:", results)
+
   const searchParamas = useSearchParams()
 
   async function handleSetProducts() {
@@ -91,13 +94,23 @@ const ProductsListing = ({
         },
       })
 
-      setApiProducts(
-        response.products.filter((prod) => {
-          const { cheapestPrice } = getProductPrice({ product: prod })
-          return Boolean(cheapestPrice) && prod
+      console.log("🔍 API Response products:", response.products)
+      console.log("🔍 Number of products from API:", response.products.length)
+
+      const filteredProducts = response.products.filter((prod) => {
+        const { cheapestPrice } = getProductPrice({ product: prod })
+        console.log(`🔍 Product ${prod.handle}:`, {
+          hasVariants: !!prod.variants?.length,
+          variants: prod.variants,
+          cheapestPrice,
         })
-      )
+        return Boolean(cheapestPrice) && prod
+      })
+
+      console.log("🔍 Filtered products:", filteredProducts.length)
+      setApiProducts(filteredProducts)
     } catch (error) {
+      console.error("❌ Error fetching products:", error)
       setApiProducts(null)
     }
   }
