@@ -77,11 +77,12 @@ const Form = () => {
               />
             </div>
 
-            <p className="text-right label-md uppercase text-action-on-secondary mt-4 mb-6">
+            {/* TODO: Add forgot password link when forgot password page is implemented */}
+            {/* <Link href="/user/forgot-password" className="block text-right label-md uppercase text-action-on-secondary mt-4">
               Forgot your password?
-            </p>
+            </Link> */}
 
-            <Button className="w-full uppercase" disabled={isSubmitting}>
+            <Button className="w-full uppercase mt-8" disabled={isSubmitting}>
               Log in
             </Button>
 
@@ -96,13 +97,12 @@ const Form = () => {
             Don&apos;t have an account yet?
           </h2>
           <Link href="/user/register">
-
-          <Button
-            variant="tonal"
-            className="w-full flex justify-center mt-8 uppercase"
-          >
-            Create account
-          </Button>
+            <Button
+              variant="tonal"
+              className="w-full flex justify-center mt-8 uppercase"
+            >
+              Create account
+            </Button>
           </Link>
         </div>
       </div>
