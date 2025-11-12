@@ -3,10 +3,14 @@
 import { HttpTypes } from "@medusajs/types"
 import {
   AlgoliaProductSidebar,
-  ProductCard,
   ProductListingActiveFilters,
   ProductsPagination,
 } from "@/components/organisms"
+import {
+  ProductListingLoadingView,
+  ProductListingNoResultsView,
+  ProductListingProductsView,
+} from "@/components/molecules"
 import { client } from "@/lib/client"
 import { Configure, useHits } from "react-instantsearch"
 import { InstantSearchNext } from "react-instantsearch-nextjs"
@@ -17,7 +21,6 @@ import { ProductListingSkeleton } from "@/components/organisms/ProductListingSke
 import { useEffect, useMemo, useState } from "react"
 import { listProducts } from "@/lib/data/products"
 import { getProductPrice } from "@/lib/helpers/get-product-price"
-import { SkeletonProductCard } from "@/components/organisms/ProductCard/SkeletonProductCard"
 
 export const AlgoliaProductsListing = ({
   category_id,
@@ -192,41 +195,23 @@ const ProductsListing = ({
         <div className="w-[280px] flex-shrink-0 hidden md:block">
           <AlgoliaProductSidebar />
         </div>
-        <div className="w-full">
-          {isLoading ? (
-            <div className="flex flex-wrap gap-4">
-              {Array.from({ length: PRODUCT_LIMIT }).map((_, idx) => (
-                <SkeletonProductCard key={idx} />
-              ))}
-            </div>
-          ) : !items.length ? (
-            <div className="text-center w-full my-10">
-              <h2 className="uppercase text-primary heading-lg">no results</h2>
-              <p className="mt-4 text-lg">
-                Sorry, we can&apos;t find any results for your criteria
-              </p>
-            </div>
-          ) : (
-            <div className="w-full">
-              <ul className="flex flex-wrap gap-4">
-                {products.map(
-                  (hit) =>
-                    apiProducts?.find((p: any) => p.id === hit.objectID) && (
-                      <ProductCard
-                        api_product={apiProducts?.find(
-                          (p: any) => p.id === hit.objectID
-                        )}
-                        key={hit.objectID}
-                        product={hit}
-                      />
-                    )
-                )}
-              </ul>
-            </div>
+        <div className="w-full flex flex-col">
+          {isLoading && <ProductListingLoadingView />}
+
+          {!isLoading && !items.length && <ProductListingNoResultsView />}
+
+          {!isLoading && items.length > 0 && (
+            <ProductListingProductsView
+              products={products}
+              apiProducts={apiProducts}
+            />
           )}
+
+          <div className="mt-auto">
+            <ProductsPagination pages={pages} />
+          </div>
         </div>
       </div>
-      <ProductsPagination pages={pages} />
     </div>
   )
 }
