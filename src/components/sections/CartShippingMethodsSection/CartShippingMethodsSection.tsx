@@ -10,7 +10,6 @@ import { clx, Heading, Text } from "@medusajs/ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Fragment, useEffect, useState } from "react"
 import { Button } from "@/components/atoms"
-import { Modal, SelectField } from "@/components/molecules"
 import { CartShippingMethodRow } from "./CartShippingMethodRow"
 import { Listbox, Transition } from "@headlessui/react"
 import clsx from "clsx"
@@ -184,6 +183,8 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
     )
     .map((item) => item.product?.seller?.name)
 
+  const isEditEnabled = !isOpen && !!cart?.shipping_methods?.length
+
   return (
     <div className="border p-4 rounded-sm bg-ui-bg-interactive">
       {/* {missingModal && (
@@ -223,7 +224,7 @@ const CartShippingMethodsSection: React.FC<ShippingProps> = ({
           )}
           Delivery
         </Heading>
-        {!isOpen && (
+        {isEditEnabled && (
           <Text>
             <Button onClick={handleEdit} variant="tonal">
               Edit
