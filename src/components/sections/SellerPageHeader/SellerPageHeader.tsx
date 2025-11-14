@@ -13,14 +13,6 @@ export const SellerPageHeader = ({
   return (
     <div className="border rounded-sm">
       <SellerHeading header seller={seller} user={user} />
-      <div className="p-4 pb-0">
-      <p
-        dangerouslySetInnerHTML={{
-          __html: seller.description,
-        }}
-        className="label-md"
-      />
-      </div>
       <SellerFooter seller={seller} />
     </div>
   )

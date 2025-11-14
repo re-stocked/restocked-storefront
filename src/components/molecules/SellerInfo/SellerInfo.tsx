@@ -7,10 +7,12 @@ export const SellerInfo = ({
   seller,
   header = false,
   showArrow = false,
+  bottomBorder = false,
 }: {
   seller: SellerProps
   header?: boolean
   showArrow?: boolean
+  bottomBorder?: boolean
 }) => {
   const { photo, name, reviews } = seller
 
@@ -35,6 +37,7 @@ export const SellerInfo = ({
             rating={rating}
             reviewCount={reviewCount}
             showArrow={showArrow}
+            bottomBorder={bottomBorder}
           />
         </LocalizedClientLink>
       ) : (
@@ -44,6 +47,7 @@ export const SellerInfo = ({
           rating={rating}
           reviewCount={reviewCount}
           showArrow={showArrow}
+          bottomBorder={bottomBorder}
         />
       )}
       {!header && (

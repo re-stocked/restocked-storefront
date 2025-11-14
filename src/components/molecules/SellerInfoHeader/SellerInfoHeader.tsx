@@ -1,6 +1,7 @@
 import { StarRating } from "@/components/atoms"
 import { SellerAvatar } from "@/components/cells/SellerAvatar/SellerAvatar"
 import { CollapseIcon } from "@/icons"
+import clsx from "clsx"
 
 export const SellerInfoHeader = ({
   photo,
@@ -8,14 +9,21 @@ export const SellerInfoHeader = ({
   rating,
   reviewCount,
   showArrow,
+  bottomBorder = false,
 }: {
   photo: string
   name: string
   rating: number
   reviewCount: number
   showArrow: boolean
+  bottomBorder?: boolean
 }) => (
-  <div className="flex gap-4 w-full border-b pb-5 p-4 items-center">
+  <div
+    className={clsx(
+      "flex gap-4 w-full p-5 items-center",
+      bottomBorder && "border-b"
+    )}
+  >
     <div className="rounded-sm">
       <SellerAvatar photo={photo} size={56} alt={name} />
     </div>
@@ -29,4 +37,3 @@ export const SellerInfoHeader = ({
     {showArrow && <CollapseIcon className="ml-auto -rotate-90" />}
   </div>
 )
-
