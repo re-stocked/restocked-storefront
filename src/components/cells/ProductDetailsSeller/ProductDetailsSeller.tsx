@@ -8,7 +8,7 @@ export const ProductDetailsSeller = ({ seller }: { seller?: SellerProps }) => {
 
   return (
     <div className="border rounded-sm">
-      <div className="p-4">
+      <div>
         <LocalizedClientLink href={`/sellers/${seller.handle}`}>
           <div className="flex justify-between">
             <SellerInfo seller={seller} />
