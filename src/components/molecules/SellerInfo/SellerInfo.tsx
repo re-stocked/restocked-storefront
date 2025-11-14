@@ -2,13 +2,17 @@ import { StarRating } from "@/components/atoms"
 import { SellerAvatar } from "@/components/cells/SellerAvatar/SellerAvatar"
 import { SellerProps } from "@/types/seller"
 import { SellerReview } from "../SellerReview/SellerReview"
+import { CollapseIcon } from "@/icons"
+import LocalizedClientLink from "../LocalizedLink/LocalizedLink"
 
 export const SellerInfo = ({
   seller,
   header = false,
+  showArrow = false,
 }: {
   seller: SellerProps
   header?: boolean
+  showArrow?: boolean
 }) => {
   const { photo, name, reviews } = seller
 
@@ -25,7 +29,7 @@ export const SellerInfo = ({
 
   return (
     <div className="flex flex-col w-full">
-      <div className="flex gap-4 w-full border-b pb-5 p-4">
+      <div className="flex gap-4 w-full border-b pb-5 p-4 items-center">
         <div className="rounded-sm">
           <SellerAvatar photo={photo} size={56} alt={name} />
         </div>
@@ -38,6 +42,11 @@ export const SellerInfo = ({
             </span>
           </div>
         </div>
+        {showArrow && (
+          <LocalizedClientLink className="ml-auto" href={`/sellers/${seller.handle}`}>
+            <CollapseIcon className="-rotate-90" />
+          </LocalizedClientLink>
+        )}
       </div>
       {!header && (
         <div className="flex flex-col gap-5 p-4">
@@ -45,7 +54,9 @@ export const SellerInfo = ({
           {reviews
             ?.filter((rev) => rev !== null)
             .slice(-3)
-            .map((review) => <SellerReview key={review.id} review={review} />)}
+            .map((review) => (
+              <SellerReview key={review.id} review={review} />
+            ))}
         </div>
       )}
     </div>
