@@ -30,7 +30,7 @@ export const SellerInfo = ({
   return (
     <div className="flex flex-col w-full">
       {showArrow ? (
-        <LocalizedClientLink href={`/sellers/${seller.handle}`}>
+        <LocalizedClientLink href={`/sellers/${seller.handle}`} aria-label={`View ${name} seller`}>
           <SellerInfoHeader
             photo={photo}
             name={name}
