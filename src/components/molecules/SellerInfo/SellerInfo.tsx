@@ -1,9 +1,7 @@
-import { StarRating } from "@/components/atoms"
-import { SellerAvatar } from "@/components/cells/SellerAvatar/SellerAvatar"
 import { SellerProps } from "@/types/seller"
 import { SellerReview } from "../SellerReview/SellerReview"
-import { CollapseIcon } from "@/icons"
 import LocalizedClientLink from "../LocalizedLink/LocalizedLink"
+import { SellerInfoHeader } from "../SellerInfoHeader/SellerInfoHeader"
 
 export const SellerInfo = ({
   seller,
@@ -29,25 +27,25 @@ export const SellerInfo = ({
 
   return (
     <div className="flex flex-col w-full">
-      <div className="flex gap-4 w-full border-b pb-5 p-4 items-center">
-        <div className="rounded-sm">
-          <SellerAvatar photo={photo} size={56} alt={name} />
-        </div>
-        <div className="flex flex-col gap-1">
-          <h3 className="heading-sm text-primary">{name}</h3>
-          <div className="flex items-center gap-2">
-            <StarRating starSize={14} rate={rating || 0} />
-            <span className="label-md text-secondary">
-              {reviewCount} reviews
-            </span>
-          </div>
-        </div>
-        {showArrow && (
-          <LocalizedClientLink className="ml-auto" href={`/sellers/${seller.handle}`}>
-            <CollapseIcon className="-rotate-90" />
-          </LocalizedClientLink>
-        )}
-      </div>
+      {showArrow ? (
+        <LocalizedClientLink href={`/sellers/${seller.handle}`}>
+          <SellerInfoHeader
+            photo={photo}
+            name={name}
+            rating={rating}
+            reviewCount={reviewCount}
+            showArrow={showArrow}
+          />
+        </LocalizedClientLink>
+      ) : (
+        <SellerInfoHeader
+          photo={photo}
+          name={name}
+          rating={rating}
+          reviewCount={reviewCount}
+          showArrow={showArrow}
+        />
+      )}
       {!header && (
         <div className="flex flex-col gap-5 p-4">
           <h3 className="heading-sm uppercase">Seller reviews</h3>
