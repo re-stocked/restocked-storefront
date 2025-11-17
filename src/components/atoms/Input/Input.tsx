@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils"
 import { CloseIcon } from "@/icons"
 import { useEffect, useState } from "react"
 import { EyeMini, EyeSlashMini } from "@medusajs/icons"
-import { IconButton } from "../IconButton/IconButton"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
