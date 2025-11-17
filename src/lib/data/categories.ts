@@ -3,21 +3,22 @@ import { HttpTypes } from "@medusajs/types"
 
 interface CategoriesProps {
   query?: Record<string, any>
-  headingCategories?: string[]
 }
 
 export const listCategories = async ({
   query,
-  headingCategories = [],
 }: Partial<CategoriesProps> = {}) => {
   const limit = query?.limit || 100
 
-  const categories = await sdk.client
+  const allCategories = await sdk.client
     .fetch<{
       product_categories: HttpTypes.StoreProductCategory[]
     }>("/store/product-categories", {
       query: {
-        fields: "handle, name, rank, parent_category_id",
+        fields:
+          "id,handle,name,rank,parent_category_id,category_children.id,category_children.name,category_children.handle,category_children.parent_category_id",
+        include_descendants_tree: true,
+        include_ancestors_tree: true,
         limit,
         ...query,
       },
@@ -26,32 +27,28 @@ export const listCategories = async ({
     })
     .then(({ product_categories }) => product_categories)
 
-  const parentCategories = categories.filter(({ name }) =>
-    headingCategories.includes(name.toLowerCase())
+  const parentCategories = allCategories.filter(
+    (cat) => !cat.parent_category_id
   )
 
-  const childrenCategories = categories.filter(
-    ({ name }) => !headingCategories.includes(name.toLowerCase())
+  const mainCategories = parentCategories.flatMap(
+    (parent) => parent.category_children || []
   )
 
   return {
-    categories: childrenCategories.filter(
-      ({ parent_category_id }) => !parent_category_id
-    ),
-    parentCategories: parentCategories,
+    parentCategories,
+    categories: mainCategories,
   }
 }
 
-export const getCategoryByHandle = async (categoryHandle: string[]) => {
-  const handle = `${categoryHandle.join("/")}`
-
+export const getCategoryByHandle = async (categoryHandle: string) => {
   return sdk.client
     .fetch<HttpTypes.StoreProductCategoryListResponse>(
       `/store/product-categories`,
       {
         query: {
           fields: "*category_children",
-          handle,
+          handle: categoryHandle,
         },
         cache: "force-cache",
         next: { revalidate: 300 },

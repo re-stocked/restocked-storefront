@@ -42,6 +42,7 @@ export const MobileNavbar = ({
               <CategoryNavbar
                 onClose={closeMenuHandler}
                 categories={childrenCategories}
+                parentCategories={parentCategories}
               />
             </div>
           </div>
