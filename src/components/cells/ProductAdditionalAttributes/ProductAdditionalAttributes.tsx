@@ -15,11 +15,11 @@ export const ProductAdditionalAttributes = ({
     <ProductPageAccordion heading="Additional attributes" defaultOpen={false}>
       {nonEmptyAttributes.map((attribute) => (
         <div
-          key={attribute?.id}
+          key={attribute.id}
           className="border rounded-sm grid grid-cols-2 text-center label-md"
         >
-          <div className="border-r py-3">{attribute?.attribute?.name}</div>
-          <div className="py-3">{attribute?.value}</div>
+          <div className="border-r py-3">{attribute.attribute?.name}</div>
+          <div className="py-3">{attribute.value}</div>
         </div>
       ))}
     </ProductPageAccordion>
