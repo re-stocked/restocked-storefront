@@ -7,23 +7,22 @@ interface Props {
   apiProducts: HttpTypes.StoreProduct[] | null
 }
 
-const ProductListingProductsView = ({
-  products,
-  apiProducts,
-}: Props) => (
+const ProductListingProductsView = ({ products, apiProducts }: Props) => (
   <div className="w-full">
-    <div className="flex flex-wrap gap-4">
+    <ul className="flex flex-wrap gap-4">
       {products.map(
         (hit) =>
           apiProducts?.find((p) => p.id === hit.objectID) && (
-            <ProductCard
-              api_product={apiProducts?.find((p) => p.id === hit.objectID)}
-              key={hit.objectID}
-              product={hit}
-            />
+            <li key={hit.objectID} className="w-full lg:w-[calc(25%-1rem)] min-w-[250px]">
+              <ProductCard
+                api_product={apiProducts?.find((p) => p.id === hit.objectID)}
+                product={hit}
+                className="w-full h-full lg:w-full min-w-0"
+              />
+            </li>
           )
       )}
-    </div>
+    </ul>
   </div>
 )
 
