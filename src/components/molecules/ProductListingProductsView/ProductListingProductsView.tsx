@@ -12,7 +12,7 @@ const ProductListingProductsView = ({
   apiProducts,
 }: Props) => (
   <div className="w-full">
-    <ul className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap gap-4">
       {products.map(
         (hit) =>
           apiProducts?.find((p) => p.id === hit.objectID) && (
@@ -23,7 +23,7 @@ const ProductListingProductsView = ({
             />
           )
       )}
-    </ul>
+    </div>
   </div>
 )
 
