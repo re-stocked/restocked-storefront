@@ -2,7 +2,7 @@ import { sdk } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
 
 interface CategoriesProps {
-  query?: Record<string, any>
+  query?: Record<string, unknown>
 }
 
 export const listCategories = async ({
@@ -16,7 +16,7 @@ export const listCategories = async ({
     }>("/store/product-categories", {
       query: {
         fields:
-          "id,handle,name,rank,parent_category_id,category_children.id,category_children.name,category_children.handle,category_children.parent_category_id",
+          "id,handle,name,rank,parent_category_id,description,*category_children, *category_children.metadata",
         include_descendants_tree: true,
         include_ancestors_tree: true,
         limit,
@@ -35,9 +35,24 @@ export const listCategories = async ({
     (parent) => parent.category_children || []
   )
 
+  const mainCategoriesWithChildren = mainCategories.map((mainCat) => {
+    const children = allCategories.filter(
+      (cat) => cat.parent_category_id === mainCat.id
+    )
+    
+    if (children.length > 0) {
+      return {
+        ...mainCat,
+        category_children: children
+      }
+    }
+    
+    return mainCat
+  })
+
   return {
     parentCategories,
-    categories: mainCategories,
+    categories: mainCategoriesWithChildren,
   }
 }
 
