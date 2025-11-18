@@ -4,7 +4,8 @@ import { HttpTypes } from "@medusajs/types"
 import { useEffect } from "react"
 import { cn } from "@/lib/utils"
 import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
-import { CloseIcon } from "@/icons"
+import { ArrowLeftIcon, CloseIcon } from "@/icons"
+import { IconButton } from "@/components/atoms"
 
 interface MobileCategoryDrawerProps {
   category: HttpTypes.StoreProductCategory
@@ -23,13 +24,13 @@ export const MobileCategoryDrawer = ({
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden"
     } else {
-      document.body.style.overflow = ''
+      document.body.style.overflow = ""
     }
 
     return () => {
-      document.body.style.overflow = ''
+      document.body.style.overflow = ""
     }
   }, [isOpen])
 
@@ -43,8 +44,8 @@ export const MobileCategoryDrawer = ({
       {/* Backdrop */}
       <div
         className={cn(
-          'fixed inset-0 bg-primary/80 z-50 transition-opacity duration-300',
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          "fixed inset-0 bg-primary/80 z-50 transition-opacity duration-300",
+          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         onClick={onClose}
       />
@@ -52,32 +53,49 @@ export const MobileCategoryDrawer = ({
       {/* Drawer */}
       <div
         className={cn(
-          'fixed inset-0 z-50 bg-primary transition-transform duration-300 ease-in-out',
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+          "fixed inset-0 z-50 bg-primary transition-transform duration-300 ease-in-out",
+          isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b">
-            <h2 className="heading-md uppercase text-primary">{category.name}</h2>
-            <button
+          <div className="flex items-center p-4 border-b gap-4">
+            <IconButton
+              icon={<ArrowLeftIcon size={20} />}
               onClick={onClose}
               className="p-2 hover:bg-secondary/10 rounded-sm transition-colors"
               aria-label="Close drawer"
-            >
-              <CloseIcon size={24} />
-            </button>
+              variant="icon"
+            />
+            <h3 className="heading-md uppercase text-primary">
+              {category.name}
+            </h3>
+            <IconButton
+              icon={<CloseIcon size={20} />}
+              onClick={onClose}
+              className="p-2 hover:bg-secondary/10 rounded-sm transition-colors ml-auto"
+              aria-label="Close drawer"
+              variant="icon"
+            />
           </div>
 
           {/* Content */}
           <div className="flex-1 overflow-y-auto p-4">
             <nav className="flex flex-col gap-2">
+                <LocalizedClientLink
+                  key={category.id}
+                  href={`/categories/${category.handle}`}
+                  onClick={handleLinkClick}
+                  className="heading-sm uppercase px-4 py-3 text-primary hover:bg-secondary/10 transition-colors"
+                >
+                  {category.name}
+                </LocalizedClientLink>
               {childCategories.map((child) => (
                 <LocalizedClientLink
                   key={child.id}
                   href={`/categories/${child.handle}`}
                   onClick={handleLinkClick}
-                  className="label-md uppercase px-4 py-3 text-primary hover:bg-secondary/10 transition-colors rounded-sm"
+                  className="label-md uppercase px-4 py-3 text-primary hover:bg-secondary/10 transition-colors"
                 >
                   {child.name}
                 </LocalizedClientLink>
@@ -89,4 +107,3 @@ export const MobileCategoryDrawer = ({
     </>
   )
 }
-
