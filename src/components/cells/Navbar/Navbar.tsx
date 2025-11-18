@@ -9,7 +9,7 @@ export const Navbar = ({
   parentCategories: HttpTypes.StoreProductCategory[]
 }) => {
   return (
-    <div className="flex flex-col md:flex-row border py-4 justify-between px-4 md:px-5 gap-4 md:gap-0">
+    <div className="flex flex-col lg:flex-row border py-4 justify-between px-4 md:px-5 gap-4 md:gap-0">
       <div className="hidden lg:flex items-center justify-between w-full">
         <CategoryNavbar
           categories={categories}

@@ -7,12 +7,13 @@ import {
 } from '@/components/molecules';
 import { CloseIcon, HamburgerMenuIcon } from '@/icons';
 import { useState } from 'react';
+import { IconButton } from '@/components/atoms';
 
 export const MobileNavbar = ({
-  childrenCategories,
+  categories,
   parentCategories,
 }: {
-  childrenCategories: HttpTypes.StoreProductCategory[];
+  categories: HttpTypes.StoreProductCategory[];
   parentCategories: HttpTypes.StoreProductCategory[];
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -27,21 +28,26 @@ export const MobileNavbar = ({
         <HamburgerMenuIcon />
       </div>
       {openMenu && (
-        <div className='fixed w-full h-full bg-primary p-2 top-0 left-0 z-20'>
-          <div className='flex justify-end'>
-            <div onClick={() => closeMenuHandler()}>
-              <CloseIcon size={20} />
-            </div>
+        <div className='fixed w-full h-full bg-primary top-0 left-0 z-20'>
+          <div className='flex justify-between items-center border-b p-4'>
+            <h2 className='heading-md uppercase text-primary'>Menu</h2>
+            <IconButton
+              icon={<CloseIcon size={20} />}
+              onClick={() => closeMenuHandler()}
+              variant='icon'
+              size='small'
+            />
           </div>
-          <div className='border mt-4 rounded-sm'>
+          <div className=''>
             <HeaderCategoryNavbar
               onClose={closeMenuHandler}
-              categories={parentCategories}
+              categories={categories}
+              parentCategories={parentCategories}
             />
-            <div className='border-t pt-2'>
+            <div className='p-4'>
               <CategoryNavbar
                 onClose={closeMenuHandler}
-                categories={childrenCategories}
+                categories={categories}
                 parentCategories={parentCategories}
               />
             </div>

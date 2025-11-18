@@ -37,7 +37,7 @@ export const Header = async () => {
         <div className="flex items-center lg:w-1/3">
           <MobileNavbar
             parentCategories={parentCategories}
-            childrenCategories={categories}
+            categories={categories}
           />
           <ParentCategoryLinks 
             parentCategories={parentCategories}
