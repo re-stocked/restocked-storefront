@@ -8,6 +8,7 @@ import {
 import { CloseIcon, HamburgerMenuIcon } from '@/icons';
 import { useState } from 'react';
 import { IconButton } from '@/components/atoms';
+import { MobileCategoryNavbar } from './components';
 
 export const MobileNavbar = ({
   categories,
@@ -45,7 +46,7 @@ export const MobileNavbar = ({
               parentCategories={parentCategories}
             />
             <div className='p-4'>
-              <CategoryNavbar
+              <MobileCategoryNavbar
                 onClose={closeMenuHandler}
                 categories={categories}
                 parentCategories={parentCategories}

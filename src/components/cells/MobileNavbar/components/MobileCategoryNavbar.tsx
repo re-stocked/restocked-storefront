@@ -4,25 +4,27 @@ import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedL
 import { cn } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { CollapseIcon } from "@/icons"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import {
   getActiveParentHandle,
   findParentCategoryHandle,
   filterCategoriesByParent,
 } from "@/lib/helpers/category-utils"
+import { MobileCategoryDrawer } from "./MobileCategoryDrawer"
 
-interface Props {
+interface MobileCategoryNavbarProps {
   categories: HttpTypes.StoreProductCategory[]
   parentCategories?: HttpTypes.StoreProductCategory[]
   onClose?: (state: boolean) => void
 }
 
-export const Mobile = ({
+export const MobileCategoryNavbar = ({
   categories,
   parentCategories = [],
   onClose,
-}: Props) => {
+}: MobileCategoryNavbarProps) => {
   const { category } = useParams<{ category?: string }>()
+  const [selectedCategory, setSelectedCategory] = useState<HttpTypes.StoreProductCategory | null>(null)
 
   const activeParentHandle = useMemo(
     () => getActiveParentHandle(category, categories, parentCategories),
@@ -44,63 +46,74 @@ export const Mobile = ({
     [activeParentHandle, parentCategories, categories]
   )
 
-  const hoveredCategory = useMemo(
-    () => filteredCategories.find((cat) => cat.id === hoveredCategoryId),
-    [filteredCategories, hoveredCategoryId]
-  )
+  const handleClose = () => {
+    onClose?.(false)
+  }
+
+  const handleCategoryClick = (categoryId: string) => {
+    const cat = filteredCategories.find((c) => c.id === categoryId)
+    if (cat && cat.category_children && cat.category_children.length > 0) {
+      setSelectedCategory(cat)
+    }
+  }
+
+  const handleDrawerClose = () => {
+    setSelectedCategory(null)
+  }
 
   return (
     <>
       <nav
-        className="flex md:items-center flex-col md:flex-row md:overflow-x-auto md:scrollbar-hide md:max-w-full gap-2"
-        aria-label="Category navigation"
+        className="flex flex-col gap-2"
+        aria-label="Mobile category navigation"
       >
         <LocalizedClientLink
           href="/categories"
           onClick={handleClose}
-          className={cn(
-            "label-md uppercase px-2 my-1 md:my-0 flex items-center justify-between md:flex-shrink-0 text-primary"
-          )}
+          className="label-md uppercase px-4 py-3 text-primary hover:bg-secondary/10 transition-colors"
         >
           All Products
         </LocalizedClientLink>
 
         {filteredCategories.map(({ id, handle, name, category_children }) => {
           const categoryUrl = `/categories/${handle}`
-          const isActive =
-            handle === category || handle === parentCategoryHandle
+          const isActive = handle === category || handle === parentCategoryHandle
           const hasChildren = category_children && category_children.length > 0
 
           return (
-            <div
-              key={id}
-              className="md:flex-shrink-0"
-             
-            >
-              <LocalizedClientLink
-                href={categoryUrl}
-                onClick={handleClose}
-                className={cn(
-                  "label-md uppercase px-2 py-1 my-3 md:my-0 flex items-center justify-between md:whitespace-nowrap text-primary relative z-10",
-                  isActive && "md:border-b md:border-primary"
-                )}
-              >
-                {name}
+            <div key={id} className="relative">
+              <div className="flex items-center justify-between">
+                <LocalizedClientLink
+                  href={categoryUrl}
+                  onClick={handleClose}
+                  className={cn(
+                    "label-md uppercase px-4 py-3 text-primary hover:bg-secondary/10 transition-colors flex-1",
+                    isActive && "border-l-2 border-primary bg-secondary/5"
+                  )}
+                >
+                  {name}
+                </LocalizedClientLink>
+                
                 {hasChildren && (
-                  <CollapseIcon size={18} className="-rotate-90 md:hidden" />
+                  <button
+                    onClick={() => handleCategoryClick(id)}
+                    className="px-4 py-3 hover:bg-secondary/10 transition-colors"
+                    aria-label={`View ${name} subcategories`}
+                  >
+                    <CollapseIcon size={18} className="-rotate-90" />
+                  </button>
                 )}
-              </LocalizedClientLink>
+              </div>
             </div>
           )
         })}
       </nav>
 
-      {shouldRenderDropdown && hoveredCategory && (
-        <CategoryDropdownMenu
-          category={hoveredCategory}
-          isVisible={isDropdownVisible}
-          onMouseEnter={handleDropdownMouseEnter}
-          onMouseLeave={handleDropdownMouseLeave}
+      {selectedCategory && (
+        <MobileCategoryDrawer
+          category={selectedCategory}
+          isOpen={!!selectedCategory}
+          onClose={handleDrawerClose}
           onLinkClick={handleClose}
         />
       )}
