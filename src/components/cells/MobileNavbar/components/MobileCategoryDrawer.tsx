@@ -63,7 +63,6 @@ export const MobileCategoryDrawer = ({
             <IconButton
               icon={<ArrowLeftIcon size={20} />}
               onClick={onClose}
-              className="p-2 hover:bg-secondary/10 rounded-sm transition-colors"
               aria-label="Close drawer"
               variant="icon"
             />
@@ -73,7 +72,7 @@ export const MobileCategoryDrawer = ({
             <IconButton
               icon={<CloseIcon size={20} />}
               onClick={onClose}
-              className="p-2 hover:bg-secondary/10 rounded-sm transition-colors ml-auto"
+              className="ml-auto"
               aria-label="Close drawer"
               variant="icon"
             />
