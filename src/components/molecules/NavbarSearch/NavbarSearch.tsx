@@ -16,8 +16,7 @@ export const NavbarSearch = ({ className }: Props) => {
 
   const [search, setSearch] = useState(searchParams.get("query") || "")
 
-  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSearch = () => {
     if (search) {
       redirect(`/categories?query=${search}`)
     } else {
@@ -25,14 +24,21 @@ export const NavbarSearch = ({ className }: Props) => {
     }
   }
 
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    handleSearch()
+  }
+
   return (
     <form className={clsx("w-full", className)} method="POST" onSubmit={submitHandler}>
       <Input
         icon={<SearchIcon />}
+        onIconClick={handleSearch}
+        iconAriaLabel="Search"
         placeholder="Search product"
         value={search}
         changeValue={setSearch}
-        name="query"
+        type="search"
       />
       <input type="submit" className="hidden" />
     </form>
