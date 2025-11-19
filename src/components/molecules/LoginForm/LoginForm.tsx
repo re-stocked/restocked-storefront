@@ -8,13 +8,13 @@ import {
 } from "react-hook-form"
 import { Button } from "@/components/atoms"
 import { zodResolver } from "@hookform/resolvers/zod"
-import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { LabeledInput } from "@/components/cells"
 import { loginFormSchema, LoginFormData } from "./schema"
 import { useState } from "react"
 import { login } from "@/lib/data/customer"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { toast } from "@/lib/helpers/toast"
 
 export const LoginForm = () => {
   const methods = useForm<LoginFormData>({
@@ -33,7 +33,7 @@ export const LoginForm = () => {
 }
 
 const Form = () => {
-  const [error, setError] = useState("")
+  const [error, setError] = useState(false);
   const {
     handleSubmit,
     register,
@@ -48,11 +48,16 @@ const Form = () => {
 
     const res = await login(formData)
     if (res) {
-      setError(res)
+      setError(true);
+      toast.error({ title: res || "An error occurred. Please try again." })
       return
     }
-    setError("")
+    setError(false);
     router.push("/user")
+  }
+
+  const clearApiError = () => {
+    error && setError(false);
   }
 
   return (
@@ -65,14 +70,20 @@ const Form = () => {
               <LabeledInput
                 label="E-mail"
                 placeholder="Your e-mail address"
-                error={errors.email as FieldError}
+                error={(errors.email as FieldError) || (error ? { message: '' } as FieldError : undefined)}
+                {...register("email", {
+                  onChange: clearApiError
+                })}
                 {...register("email")}
               />
               <LabeledInput
                 label="Password"
                 placeholder="Your password"
                 type="password"
-                error={errors.password as FieldError}
+                error={(errors.password as FieldError) || (error ? { message: '' } as FieldError : undefined)}
+                {...register("password", {
+                  onChange: clearApiError
+                })}
                 {...register("password")}
               />
             </div>
