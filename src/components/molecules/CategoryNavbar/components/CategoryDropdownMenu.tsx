@@ -34,7 +34,7 @@ export const CategoryDropdownMenu = ({
       onMouseLeave={onMouseLeave}
     >
       <CategoryDropdownContent>
-        <div className="grid grid-cols-1">
+        <div className="grid grid-cols-1 max-h-[22.5rem] h-full overflow-y-auto">
           <section className="border rounded-sm p-6">
             <ChildCategories
               title={category.name}

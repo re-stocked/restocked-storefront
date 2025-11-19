@@ -35,7 +35,7 @@ export const CategoryDropdownContainer = ({
       <div
         ref={containerRef}
         className={cn(
-          'fixed left-0 right-0 z-50 mx-auto w-full bg-primary transition-all duration-300 ease-in-out',
+          'fixed left-0 right-0 z-50 mx-auto w-full bg-primary transition-all duration-300 ease-in-out max-h-[25rem] h-full',
 
         )}
         onMouseEnter={onMouseEnter}
@@ -44,7 +44,7 @@ export const CategoryDropdownContainer = ({
           top: 'var(--navbar-height, 160px)',
         }}
       >
-        <div className="max-w-[1440px] bg-primary px-5">
+        <div className="max-w-[1440px] max-h-[25rem] h-full bg-primary px-5">
           {children}
         </div>
       </div>
