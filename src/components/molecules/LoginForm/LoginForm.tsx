@@ -87,7 +87,6 @@ const Form = () => {
                 {...register("email", {
                   onChange: clearApiError,
                 })}
-                {...register("email")}
               />
               <LabeledInput
                 label="Password"
@@ -100,7 +99,6 @@ const Form = () => {
                 {...register("password", {
                   onChange: clearApiError,
                 })}
-                {...register("password")}
               />
             </div>
 
