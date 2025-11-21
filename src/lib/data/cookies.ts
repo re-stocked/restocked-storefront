@@ -25,6 +25,12 @@ export const getCacheTag = async (
       return '';
     }
 
+    if (tag === 'customers' || tag === 'wishlist') {
+      const token = cookies.get('_medusa_jwt')?.value;
+      const authStatus = token ? 'auth' : 'noauth';
+      return `${tag}-${cacheId}-${authStatus}`;
+    }
+
     return `${tag}-${cacheId}`;
   } catch (error) {
     return '';

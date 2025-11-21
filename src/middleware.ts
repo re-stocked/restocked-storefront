@@ -5,6 +5,9 @@ const BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "us"
 
+// Define protected routes that require authentication
+const protectedRoutes = ['/checkout', '/user/wishlist', '/user/orders', '/user/settings', '/user/addresses', '/user/messages', '/user/reviews', '/user/returns']
+
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),
   regionMapUpdated: Date.now(),
@@ -101,9 +104,26 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  const { pathname } = request.nextUrl
   const cacheIdCookie = request.cookies.get("_medusa_cache_id")
-  const urlSegment = request.nextUrl.pathname.split("/")[1]
+  const urlSegment = pathname.split("/")[1]
   const looksLikeLocale = /^[a-z]{2}$/i.test(urlSegment || "")
+
+  // Get pathname without locale
+  const pathnameWithoutLocale = looksLikeLocale ? pathname.replace(/^\/[^/]+/, '') : pathname
+
+  const isProtectedRoute = protectedRoutes.some((route) => pathnameWithoutLocale.startsWith(route))
+
+  const token = request.cookies.get("_medusa_jwt")?.value
+
+  if (isProtectedRoute && !token) {
+    const locale = looksLikeLocale ? urlSegment : DEFAULT_REGION
+
+    const redirectUrl = new URL(`/${locale}/user`, request.url)
+    redirectUrl.searchParams.set('returnUrl', pathname)
+
+    return NextResponse.redirect(redirectUrl)
+  }
 
   // Fast path: URL already has a locale segment and cache cookie exists
   if (looksLikeLocale && cacheIdCookie) {
@@ -124,12 +144,11 @@ export async function middleware(request: NextRequest) {
   const countryCode = regionMap && (await getCountryCode(request, regionMap))
 
   const urlHasCountryCode =
-    countryCode && request.nextUrl.pathname.split("/")[1].includes(countryCode)
+    countryCode && pathname.split("/")[1].includes(countryCode)
 
   // If no country code in URL but we can resolve one, redirect to locale-prefixed path
   if (!urlHasCountryCode && countryCode) {
-    const redirectPath =
-      request.nextUrl.pathname === "/" ? "" : request.nextUrl.pathname
+    const redirectPath = pathname === "/" ? "" : pathname
     const queryString = request.nextUrl.search ? request.nextUrl.search : ""
     const redirectUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
     return NextResponse.redirect(redirectUrl, 307)

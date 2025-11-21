@@ -5,8 +5,14 @@ import { getAuthHeaders } from "./cookies"
 import { revalidatePath } from "next/cache"
 
 export const getUserWishlists = async () => {
+  const authHeaders = await getAuthHeaders()
+
+  if (!authHeaders || Object.keys(authHeaders).length === 0) {
+    return { wishlists: [], count: 0 }
+  }
+
   const headers = {
-    ...(await getAuthHeaders()),
+    ...authHeaders,
     "Content-Type": "application/json",
     "x-publishable-api-key": process.env
       .NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string,
@@ -20,6 +26,9 @@ export const getUserWishlists = async () => {
     })
     .then((res) => {
       return res
+    })
+    .catch(() => {
+      return { wishlists: [], count: 0 }
     })
 }
 

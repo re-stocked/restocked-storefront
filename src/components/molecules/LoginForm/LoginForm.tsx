@@ -11,9 +11,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { LabeledInput } from "@/components/cells"
 import { loginFormSchema, LoginFormData } from "./schema"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { login } from "@/lib/data/customer"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 
 export const LoginForm = () => {
@@ -34,12 +34,21 @@ export const LoginForm = () => {
 
 const Form = () => {
   const [error, setError] = useState("")
+  const [sessionExpiredMessage, setSessionExpiredMessage] = useState(false)
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useFormContext()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const returnUrl = searchParams.get('returnUrl')
+
+  useEffect(() => {
+    if (returnUrl) {
+      setSessionExpiredMessage(true)
+    }
+  }, [returnUrl])
 
   const submit = async (data: FieldValues) => {
     const formData = new FormData()
@@ -52,12 +61,24 @@ const Form = () => {
       return
     }
     setError("")
-    router.push("/user")
+    
+    if (returnUrl) {
+      router.push(returnUrl)
+    } else {
+      router.push("/user")
+    }
   }
 
   return (
     <main className="container">
       <div className="max-w-xl w-full mx-auto mt-6 space-y-4">
+        {sessionExpiredMessage && (
+          <div className="rounded-sm border border-warning bg-warning-secondary p-4">
+            <p className="label-md text-warning-primary text-center">
+              Your session has expired. Please log in to continue.
+            </p>
+          </div>
+        )}
         <div className="rounded-sm border p-4">
           <h1 className="heading-md uppercase mb-8 text-primary">Log in</h1>
           <form onSubmit={handleSubmit(submit)}>
