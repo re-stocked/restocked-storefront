@@ -45,7 +45,7 @@ export const AlgoliaProductsListing = ({
     seller_handle
       ? `NOT seller:null AND seller.handle:${seller_handle} AND `
       : "NOT seller:null AND "
-  }NOT seller.store_status:SUSPENDED AND supported_countries:${locale}${
+  }NOT seller.store_status:SUSPENDED AND supported_countries:${locale} AND variants.prices.currency_code:${currency_code} AND variants.prices.amount > 0${
     category_id
       ? ` AND categories.id:${category_id}${
           collection_id !== undefined
@@ -54,7 +54,6 @@ export const AlgoliaProductsListing = ({
         } ${facetFilters}`
       : ` ${facetFilters}`
   }`
-
   return (
     <InstantSearchNext searchClient={client} indexName="products">
       <Configure
@@ -86,6 +85,8 @@ const ProductsListing = ({
   >(null)
   const [isLoadingProducts, setIsLoadingProducts] = useState(false)
   const { items, results } = useHits()
+
+  console.log(items, 'items')
 
   const searchParams = useSearchParams()
 
@@ -182,6 +183,12 @@ const ProductsListing = ({
 
     return true
   }
+
+  console.log(products, 'products')
+  console.log(filteredProducts, 'filteredProducts')
+  console.log(apiProducts, 'apiProducts')
+
+
 
   return (
     <div className="min-h-[70vh]">
