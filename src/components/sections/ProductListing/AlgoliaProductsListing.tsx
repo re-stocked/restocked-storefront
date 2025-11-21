@@ -86,8 +86,6 @@ const ProductsListing = ({
   const [isLoadingProducts, setIsLoadingProducts] = useState(false)
   const { items, results } = useHits()
 
-  console.log(items, 'items')
-
   const searchParams = useSearchParams()
 
   const itemsKey = useMemo(
