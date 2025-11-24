@@ -182,12 +182,6 @@ const ProductsListing = ({
     return true
   }
 
-  console.log(products, 'products')
-  console.log(filteredProducts, 'filteredProducts')
-  console.log(apiProducts, 'apiProducts')
-
-
-
   return (
     <div className="min-h-[70vh]">
       <div className="flex justify-between w-full items-center">
