@@ -1,5 +1,9 @@
+'use server'
+
 import Image from "next/image"
 import { HttpTypes } from "@medusajs/types"
+import { cookies } from "next/headers"
+import { unstable_noStore as noStore } from 'next/cache'
 
 import { CartDropdown, MobileNavbar, Navbar } from "@/components/cells"
 import { HeartIcon, MessageIcon } from "@/icons"
@@ -17,13 +21,28 @@ import { MessageButton } from "@/components/molecules/MessageButton/MessageButto
 import { SellNowButton } from "@/components/cells/SellNowButton/SellNowButton"
 
 export const Header = async () => {
-  const user = await retrieveCustomer()
+  // Force dynamic rendering
+  noStore()
+  
+  const cookieStore = await cookies()
+  const token = cookieStore.get("_medusa_jwt")?.value
+
+  console.log('---TOKEN HEADER ---', token)
+  
+  let user = null
+
+  if (token) {
+    user = await retrieveCustomer(token).catch(() => null)
+  }
+
+  const isLoggedIn = Boolean(user)
   let wishlist: Wishlist[] = []
+  
   if (user) {
     const response = await getUserWishlists()
     wishlist = response.wishlists
   }
-
+  
   const regions = await listRegions()
 
   const wishlistCount = wishlist?.[0]?.products.length || 0
@@ -61,7 +80,7 @@ export const Header = async () => {
         <div className="flex items-center justify-end gap-2 lg:gap-4 w-full lg:w-1/3 py-2">
           <CountrySelector regions={regions} />
           {user && <MessageButton />}
-          <UserDropdown user={user} />
+          <UserDropdown isLoggedIn={isLoggedIn} />
           {user && (
             <LocalizedClientLink href="/user/wishlist" className="relative">
               <HeartIcon size={20} />

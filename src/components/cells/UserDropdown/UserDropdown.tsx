@@ -14,9 +14,9 @@ import { useUnreads } from "@talkjs/react"
 import { useState } from "react"
 
 export const UserDropdown = ({
-  user,
+  isLoggedIn,
 }: {
-  user: HttpTypes.StoreCustomer | null
+  isLoggedIn: boolean
 }) => {
   const [open, setOpen] = useState(false)
 
@@ -37,7 +37,7 @@ export const UserDropdown = ({
         <ProfileIcon size={20} />
       </LocalizedClientLink>
       <Dropdown show={open}>
-        {user ? (
+        {isLoggedIn ? (
           <div className="p-1">
             <div className="lg:w-[200px]">
               <h3 className="uppercase heading-xs border-b p-4">

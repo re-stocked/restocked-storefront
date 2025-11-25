@@ -1,12 +1,61 @@
+// middleware.ts
 import { HttpTypes } from "@medusajs/types"
 import { NextRequest, NextResponse } from "next/server"
-
+import { revalidatePath, revalidateTag} from 'next/cache'
 const BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "us"
 
 // Define protected routes that require authentication
-const protectedRoutes = ['/checkout', '/user/wishlist', '/user/orders', '/user/settings', '/user/addresses', '/user/messages', '/user/reviews', '/user/returns']
+const protectedRoutes = ['/user/wishlist', '/user/orders', '/user/settings', '/user/addresses', '/user/messages', '/user/reviews', '/user/returns']
+
+const decodeJwt = (token: string) => {
+  try {
+    const payload = token.split(".")[1]
+    const decoded = JSON.parse(
+      Buffer.from(payload, "base64").toString("utf8")
+    )
+    return decoded
+  } catch {
+    return null
+  }
+}
+
+const isTokenExpired = (token: string | null) => {
+  if (!token) return true
+
+  const payload = decodeJwt(token)
+  if (!payload?.exp) return true
+
+  return payload.exp * 1000 < Date.now()
+}
+
+function makeAuthRedirect(
+  req: NextRequest,
+  locale: string,
+  reason: "sessionRequired" | "sessionExpired",
+  cacheId?: string
+) {
+  const redirectUrl = new URL(`/${locale}/user`, req.url)
+
+  redirectUrl.searchParams.set(reason, "true")
+
+  const response = NextResponse.redirect(redirectUrl)
+
+  if (reason === "sessionExpired") {
+    response.cookies.delete('_medusa_jwt')
+  }
+
+  if (cacheId) {
+    try {
+      revalidateTag(`customers-${cacheId}`)
+    } catch (error) {
+      console.error('Failed to revalidate customer cache:', error)
+    }
+  }
+
+  return response
+}
 
 const regionMapCache = {
   regionMap: new Map<string, HttpTypes.StoreRegion>(),
@@ -106,6 +155,8 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
   const cacheIdCookie = request.cookies.get("_medusa_cache_id")
+  const cacheId = cacheIdCookie?.value || crypto.randomUUID()
+
   const urlSegment = pathname.split("/")[1]
   const looksLikeLocale = /^[a-z]{2}$/i.test(urlSegment || "")
 
@@ -114,15 +165,24 @@ export async function middleware(request: NextRequest) {
 
   const isProtectedRoute = protectedRoutes.some((route) => pathnameWithoutLocale.startsWith(route))
 
-  const token = request.cookies.get("_medusa_jwt")?.value
+  if (isProtectedRoute) {
+  const jwtCookie = request.cookies.get("_medusa_jwt")
+  const token = jwtCookie?.value
+    
+  const locale = looksLikeLocale ? urlSegment : DEFAULT_REGION
 
-  if (isProtectedRoute && !token) {
-    const locale = looksLikeLocale ? urlSegment : DEFAULT_REGION
+    // Not logged in before
+    if (!jwtCookie) {
+      console.log('NO COOKIE --------------------------------')
+      return makeAuthRedirect(request, locale, "sessionRequired", cacheId)
+    }
 
-    const redirectUrl = new URL(`/${locale}/user`, request.url)
-    redirectUrl.searchParams.set('returnUrl', pathname)
+    // Token exists but expired
+    if (token && isTokenExpired(token)) {
+      console.log('TOKEN EXPIRED --------------------------------')
 
-    return NextResponse.redirect(redirectUrl)
+      return makeAuthRedirect(request, locale, "sessionExpired", cacheId)
+    }
   }
 
   // Fast path: URL already has a locale segment and cache cookie exists
@@ -133,7 +193,6 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next()
 
   // Ensure cache id cookie exists (set without redirect)
-  const cacheId = cacheIdCookie?.value || crypto.randomUUID()
   if (!cacheIdCookie) {
     response.cookies.set("_medusa_cache_id", cacheId, {
       maxAge: 60 * 60 * 24,

@@ -15,6 +15,7 @@ import { useState, useEffect } from "react"
 import { login } from "@/lib/data/customer"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
+import { InfoIcon } from "@/icons"
 
 export const LoginForm = () => {
   const methods = useForm<LoginFormData>({
@@ -34,7 +35,9 @@ export const LoginForm = () => {
 
 const Form = () => {
   const [error, setError] = useState("")
-  const [sessionExpiredMessage, setSessionExpiredMessage] = useState(false)
+  const [authMessage, setAuthMessage] = useState<{
+    type: 'expired' | 'required' | null
+  }>({ type: null })
   const {
     handleSubmit,
     register,
@@ -42,13 +45,16 @@ const Form = () => {
   } = useFormContext()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const returnUrl = searchParams.get('returnUrl')
+  const sessionExpired = searchParams.get('sessionExpired')
+  const sessionRequired = searchParams.get('sessionRequired')
 
   useEffect(() => {
-    if (returnUrl) {
-      setSessionExpiredMessage(true)
+    if (sessionExpired === 'true') {
+      setAuthMessage({ type: 'expired' })
+    } else if (sessionRequired === 'true') {
+      setAuthMessage({ type: 'required' })
     }
-  }, [returnUrl])
+  }, [sessionExpired, sessionRequired])
 
   const submit = async (data: FieldValues) => {
     const formData = new FormData()
@@ -61,21 +67,25 @@ const Form = () => {
       return
     }
     setError("")
+    router.push("/user")
     
-    if (returnUrl) {
-      router.push(returnUrl)
-    } else {
-      router.push("/user")
-    }
   }
 
   return (
     <main className="container">
       <div className="max-w-xl w-full mx-auto mt-6 space-y-4">
-        {sessionExpiredMessage && (
-          <div className="rounded-sm border border-warning bg-warning-secondary p-4">
-            <p className="label-md text-warning-primary text-center">
-              Your session has expired. Please log in to continue.
+        {authMessage.type && (
+          <div className="rounded-sm border border-info bg-info-secondary p-4 flex gap-4 justify-center">
+            <InfoIcon size={24} />
+            <p className="label-md text-secondary">
+              
+              {authMessage.type === 'expired' && (
+              'Your session has expired. Please log in to continue.'
+
+              )}
+              {authMessage.type === 'required' && (
+                'Please log in to continue.'
+              )}
             </p>
           </div>
         )}

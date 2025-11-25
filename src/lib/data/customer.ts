@@ -3,46 +3,47 @@
 import { sdk } from "../config"
 import { HttpTypes } from "@medusajs/types"
 import { revalidateTag } from "next/cache"
-import { redirect } from "next/navigation"
 import {
   getAuthHeaders,
-  getCacheOptions,
   getCacheTag,
   getCartId,
   removeAuthToken,
   removeCartId,
   setAuthToken,
 } from "./cookies"
+import { cookies } from "next/headers"
 
-export const retrieveCustomer =
-  async (): Promise<HttpTypes.StoreCustomer | null> => {
-    const authHeaders = await getAuthHeaders()
+export const retrieveCustomer = async (token?: string): Promise<HttpTypes.StoreCustomer | null> => {
+  const authHeaders = token ? { authorization: `Bearer ${token}` } : await getAuthHeaders()
 
-    if (!authHeaders || Object.keys(authHeaders).length === 0) {
-      return null
-    }
-
-    const headers = {
-      ...authHeaders,
-    }
-
-    const next = {
-      ...(await getCacheOptions("customers")),
-    }
-
-    return await sdk.client
-      .fetch<{ customer: HttpTypes.StoreCustomer }>(`/store/customers/me`, {
-        method: "GET",
-        query: {
-          fields: "*orders",
-        },
-        headers,
-        next,
-        cache: "force-cache",
-      })
-      .then(({ customer }) => customer)
-      .catch(() => null)
+  if (!authHeaders || Object.keys(authHeaders).length === 0) {
+    return null
   }
+
+  try {
+    const cookieStore = await cookies()
+    const cacheId = cookieStore.get('_medusa_cache_id')?.value
+    const customerCacheTag = cacheId ? `customers-${cacheId}` : "customers"
+
+    const { customer } = await sdk.client.fetch<{ customer: HttpTypes.StoreCustomer }>(`/store/customers/me`, {
+      method: "GET",
+      query: {
+        fields: "*orders",
+      },
+      headers: {
+        ...authHeaders,
+      },
+      next: { 
+        tags: [customerCacheTag],
+       revalidate: 0
+      },
+    })
+
+    return customer ?? null
+  } catch (err) {
+    return null
+  }
+}
 
 export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
   const headers = {
@@ -142,7 +143,6 @@ export async function signout() {
 
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
-  redirect(`/`)
 }
 
 export async function transferCart() {
