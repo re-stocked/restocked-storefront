@@ -173,14 +173,11 @@ export async function middleware(request: NextRequest) {
 
     // Not logged in before
     if (!jwtCookie) {
-      console.log('NO COOKIE --------------------------------')
       return makeAuthRedirect(request, locale, "sessionRequired", cacheId)
     }
 
     // Token exists but expired
     if (token && isTokenExpired(token)) {
-      console.log('TOKEN EXPIRED --------------------------------')
-
       return makeAuthRedirect(request, locale, "sessionExpired", cacheId)
     }
   }
