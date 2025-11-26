@@ -127,7 +127,7 @@ const Form = () => {
           <h2 className="heading-md uppercase mb-4 text-primary">
             Don&apos;t have an account yet?
           </h2>
-          <Link href="/user/register">
+          <Link href="/register">
             <Button
               variant="tonal"
               className="w-full flex justify-center mt-8 uppercase"

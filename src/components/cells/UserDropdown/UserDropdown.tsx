@@ -30,7 +30,7 @@ export const UserDropdown = ({
       onFocus={() => setOpen(true)}
     >
       <LocalizedClientLink
-        href="/user"
+        href={isLoggedIn ? "/user" : "/login"}
         className="relative"
         aria-label="Go to user profile"
       >
@@ -63,8 +63,8 @@ export const UserDropdown = ({
           </div>
         ) : (
           <div className="p-1">
-            <NavigationItem href="/user">Login</NavigationItem>
-            <NavigationItem href="/user/register">Register</NavigationItem>
+            <NavigationItem href="/login">Login</NavigationItem>
+            <NavigationItem href="/register">Register</NavigationItem>
           </div>
         )}
       </Dropdown>

@@ -12,6 +12,7 @@ import {
   setAuthToken,
 } from "./cookies"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 export const retrieveCustomer = async (token?: string): Promise<HttpTypes.StoreCustomer | null> => {
   const authHeaders = token ? { authorization: `Bearer ${token}` } : await getAuthHeaders()
@@ -33,10 +34,7 @@ export const retrieveCustomer = async (token?: string): Promise<HttpTypes.StoreC
       headers: {
         ...authHeaders,
       },
-      next: { 
-        tags: [customerCacheTag],
-       revalidate: 0
-      },
+      cache: "force-cache"
     })
 
     return customer ?? null
@@ -143,6 +141,7 @@ export async function signout() {
 
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
+  redirect(`/`)
 }
 
 export async function transferCart() {

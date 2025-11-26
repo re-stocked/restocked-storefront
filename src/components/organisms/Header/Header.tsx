@@ -1,39 +1,23 @@
-'use server'
-
 import Image from "next/image"
 import { HttpTypes } from "@medusajs/types"
-import { cookies } from "next/headers"
-import { unstable_noStore as noStore } from 'next/cache'
 
 import { CartDropdown, MobileNavbar, Navbar } from "@/components/cells"
-import { HeartIcon, MessageIcon } from "@/icons"
-import { listCategories } from "@/lib/data/categories"
-import { PARENT_CATEGORIES } from "@/const"
+import { HeartIcon } from "@/icons"
 import { UserDropdown } from "@/components/cells/UserDropdown/UserDropdown"
-import { retrieveCustomer } from "@/lib/data/customer"
-import { getUserWishlists } from "@/lib/data/wishlist"
 import { Wishlist } from "@/types/wishlist"
 import { Badge } from "@/components/atoms"
 import CountrySelector from "@/components/molecules/CountrySelector/CountrySelector"
-import { listRegions } from "@/lib/data/regions"
 import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { MessageButton } from "@/components/molecules/MessageButton/MessageButton"
 import { SellNowButton } from "@/components/cells/SellNowButton/SellNowButton"
+import { listCategories } from "@/lib/data/categories"
+import { PARENT_CATEGORIES } from "@/const"
+import { listRegions } from "@/lib/data/regions"
+import { getUserWishlists } from "@/lib/data/wishlist"
+import { retrieveCustomer } from "@/lib/data/customer"
 
 export const Header = async () => {
-  // Force dynamic rendering
-  noStore()
-  
-  const cookieStore = await cookies()
-  const token = cookieStore.get("_medusa_jwt")?.value
-
-  console.log('---TOKEN HEADER ---', token)
-  
-  let user = null
-
-  if (token) {
-    user = await retrieveCustomer(token).catch(() => null)
-  }
+  const user = await retrieveCustomer().catch(() => null)
 
   const isLoggedIn = Boolean(user)
   let wishlist: Wishlist[] = []

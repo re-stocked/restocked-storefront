@@ -1,12 +1,10 @@
 // middleware.ts
 import { HttpTypes } from "@medusajs/types"
 import { NextRequest, NextResponse } from "next/server"
-import { revalidatePath, revalidateTag} from 'next/cache'
 const BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "us"
 
-// Define protected routes that require authentication
 const protectedRoutes = ['/user/wishlist', '/user/orders', '/user/settings', '/user/addresses', '/user/messages', '/user/reviews', '/user/returns']
 
 const decodeJwt = (token: string) => {
@@ -36,7 +34,7 @@ function makeAuthRedirect(
   reason: "sessionRequired" | "sessionExpired",
   cacheId?: string
 ) {
-  const redirectUrl = new URL(`/${locale}/user`, req.url)
+  const redirectUrl = new URL(`/${locale}/login`, req.url)
 
   redirectUrl.searchParams.set(reason, "true")
 
@@ -44,14 +42,6 @@ function makeAuthRedirect(
 
   if (reason === "sessionExpired") {
     response.cookies.delete('_medusa_jwt')
-  }
-
-  if (cacheId) {
-    try {
-      revalidateTag(`customers-${cacheId}`)
-    } catch (error) {
-      console.error('Failed to revalidate customer cache:', error)
-    }
   }
 
   return response

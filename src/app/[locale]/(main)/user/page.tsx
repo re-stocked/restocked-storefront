@@ -1,11 +1,13 @@
-import { LoginForm } from "@/components/molecules"
 import { UserNavigation } from "@/components/molecules"
 import { retrieveCustomer } from "@/lib/data/customer"
+import { redirect } from "next/navigation"
 
 export default async function UserPage() {
   const user = await retrieveCustomer()
 
-  if (!user) return <LoginForm />
+  if (!user) {
+    redirect("/login")
+  }
 
   return (
     <main className="container">
