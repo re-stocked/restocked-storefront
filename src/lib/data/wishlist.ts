@@ -1,87 +1,77 @@
-"use server"
-import { Wishlist } from "@/types/wishlist"
-import { sdk } from "../config"
-import { getAuthHeaders } from "./cookies"
-import { revalidatePath } from "next/cache"
+'use server';
+
+import { revalidatePath } from 'next/cache';
+
+import { Wishlist } from '@/types/wishlist';
+
+import { fetchQuery, sdk } from '../config';
+import { getAuthHeaders } from './cookies';
 
 export const getUserWishlists = async () => {
-  const authHeaders = await getAuthHeaders()
-
-  if (!authHeaders || Object.keys(authHeaders).length === 0) {
-    return { wishlists: [], count: 0 }
-  }
+  const authHeaders = await getAuthHeaders();
 
   const headers = {
     ...authHeaders,
-    "Content-Type": "application/json",
-    "x-publishable-api-key": process.env
-      .NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string,
-  }
+    'Content-Type': 'application/json',
+    'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string
+  };
 
   return sdk.client
     .fetch<{ wishlists: Wishlist[]; count: number }>(`/store/wishlist`, {
-      cache: "no-cache",
+      cache: 'no-cache',
       headers,
-      method: "GET",
+      method: 'GET'
     })
-    .then((res) => {
-      return res
+    .then(res => {
+      return res;
     })
     .catch(() => {
-      return { wishlists: [], count: 0 }
-    })
-}
+      return { wishlists: [], count: 0 };
+    });
+};
 
 export const addWishlistItem = async ({
   reference_id,
-  reference,
+  reference
 }: {
-  reference_id: string
-  reference: "product"
+  reference_id: string;
+  reference: 'product';
 }) => {
   const headers = {
-    ...(await getAuthHeaders()),
-    "Content-Type": "application/json",
-    "x-publishable-api-key": process.env
-      .NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string,
-  }
+    ...(await getAuthHeaders())
+  };
 
-  const response = await fetch(
-    `${process.env.MEDUSA_BACKEND_URL}/store/wishlist`,
-    {
-      headers,
-      method: "POST",
-      body: JSON.stringify({
-        reference,
-        reference_id,
-      }),
+  const response = await fetchQuery('/store/wishlist', {
+    headers,
+    method: 'POST',
+    body: {
+      reference,
+      reference_id
     }
-  ).then(() => {
-    revalidatePath("/wishlist")
-  })
-}
+  }).then(() => {
+    revalidatePath('/wishlist');
+  });
+
+  return response;
+};
 
 export const removeWishlistItem = async ({
   wishlist_id,
-  product_id,
+  product_id
 }: {
-  wishlist_id: string
-  product_id: string
+  wishlist_id: string;
+  product_id: string;
 }) => {
   const headers = {
-    ...(await getAuthHeaders()),
-    "Content-Type": "application/json",
-    "x-publishable-api-key": process.env
-      .NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string,
-  }
+    ...(await getAuthHeaders())
+  };
 
-  const response = await fetch(
-    `${process.env.MEDUSA_BACKEND_URL}/store/wishlist/${wishlist_id}/product/${product_id}`,
-    {
-      headers,
-      method: "DELETE",
-    }
-  ).then(() => {
-    revalidatePath("/wishlist")
-  })
-}
+  const response = await fetchQuery(`/store/wishlist/${wishlist_id}/product/${product_id}`, {
+    headers,
+    method: 'DELETE'
+  }).then(() => {
+    revalidatePath('/wishlist');
+  });
+
+  return response;
+};

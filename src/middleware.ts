@@ -5,7 +5,7 @@ const BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
 const DEFAULT_REGION = process.env.NEXT_PUBLIC_DEFAULT_REGION || "us"
 
-const protectedRoutes = ['/user/wishlist', '/user/orders', '/user/settings', '/user/addresses', '/user/messages', '/user/reviews', '/user/returns']
+const protectedRoutes = ['/user', '/user/wishlist', '/user/orders', '/user/settings', '/user/addresses', '/user/messages', '/user/reviews', '/user/returns']
 
 const decodeJwt = (token: string) => {
   try {
