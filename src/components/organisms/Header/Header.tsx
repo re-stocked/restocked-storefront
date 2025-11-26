@@ -18,7 +18,6 @@ import { retrieveCustomer } from "@/lib/data/customer"
 
 export const Header = async () => {
   const user = await retrieveCustomer().catch(() => null)
-
   const isLoggedIn = Boolean(user)
   let wishlist: Wishlist[] = []
   
@@ -63,9 +62,9 @@ export const Header = async () => {
         </div>
         <div className="flex items-center justify-end gap-2 lg:gap-4 w-full lg:w-1/3 py-2">
           <CountrySelector regions={regions} />
-          {user && <MessageButton />}
+          {isLoggedIn && <MessageButton />}
           <UserDropdown isLoggedIn={isLoggedIn} />
-          {user && (
+          {isLoggedIn && (
             <LocalizedClientLink href="/user/wishlist" className="relative">
               <HeartIcon size={20} />
               {Boolean(wishlistCount) && (
