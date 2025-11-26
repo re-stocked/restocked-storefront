@@ -35,9 +35,6 @@ export const LoginForm = () => {
 
 const Form = () => {
   const [error, setError] = useState("")
-  const [authMessage, setAuthMessage] = useState<{
-    type: 'expired' | 'required' | null
-  }>({ type: null })
   const {
     handleSubmit,
     register,
@@ -48,13 +45,10 @@ const Form = () => {
   const sessionExpired = searchParams.get('sessionExpired')
   const sessionRequired = searchParams.get('sessionRequired')
 
-  useEffect(() => {
-    if (sessionExpired === 'true') {
-      setAuthMessage({ type: 'expired' })
-    } else if (sessionRequired === 'true') {
-      setAuthMessage({ type: 'required' })
-    }
-  }, [sessionExpired, sessionRequired])
+  const authMessage =
+  sessionExpired === "true" ? "expired"
+  : sessionRequired === "true" ? "required"
+  : null
 
   const submit = async (data: FieldValues) => {
     const formData = new FormData()
@@ -74,16 +68,16 @@ const Form = () => {
   return (
     <main className="container">
       <div className="max-w-xl w-full mx-auto mt-6 space-y-4">
-        {authMessage.type && (
+        {authMessage && (
           <div className="rounded-sm border border-info bg-info-secondary p-4 flex gap-4 justify-center">
             <InfoIcon size={24} />
             <p className="label-md text-secondary">
               
-              {authMessage.type === 'expired' && (
+              {authMessage === 'expired' && (
               'Your session has expired. Please log in to continue.'
 
               )}
-              {authMessage.type === 'required' && (
+              {authMessage === 'required' && (
                 'Please log in to continue.'
               )}
             </p>
