@@ -7,11 +7,6 @@ import { HttpTypes } from '@medusajs/types';
 import { Button } from '@/components/atoms';
 import { HeartFilledIcon, HeartIcon } from '@/icons';
 import { addWishlistItem, removeWishlistItem } from '@/lib/data/wishlist';
-import {
-  handleAuthError,
-  isAuthError,
-  useHandleAuthErrorWithRefresh
-} from '@/lib/helpers/auth-error-handler';
 import { toast } from '@/lib/helpers/toast';
 import { Wishlist } from '@/types/wishlist';
 
