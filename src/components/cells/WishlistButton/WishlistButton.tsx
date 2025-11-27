@@ -41,8 +41,8 @@ export const WishlistButton = ({
       });
     } catch (error) {
       toast.error({
-        title: 'Failed to add item to wishlist:',
-        description: typeof error === 'string' ? error : 'An error occurred'
+        title: 'Failed to add item to wishlist',
+        description: error instanceof Error ? error?.message : 'An error occurred'
       });
     } finally {
       setIsWishlistAdding(false);
@@ -59,8 +59,8 @@ export const WishlistButton = ({
       });
     } catch (error) {
       toast.error({
-        title: 'Failed to add item to wishlist:',
-        description: typeof error === 'string' ? error : 'An error occurred'
+        title: 'Failed to add item to wishlist',
+        description: error instanceof Error ? error?.message : 'An error occurred'
       });
     } finally {
       setIsWishlistAdding(false);

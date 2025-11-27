@@ -48,9 +48,13 @@ export const addWishlistItem = async ({
       reference,
       reference_id
     }
-  }).then(() => {
-    revalidatePath('/wishlist');
-  });
+  })
+
+  revalidatePath('/wishlist');
+
+  if (!response.ok) {
+    throw new Error(response.error?.message || 'An error occured');
+  }
 
   return response;
 };
@@ -69,9 +73,13 @@ export const removeWishlistItem = async ({
   const response = await fetchQuery(`/store/wishlist/${wishlist_id}/product/${product_id}`, {
     headers,
     method: 'DELETE'
-  }).then(() => {
-    revalidatePath('/wishlist');
-  });
+  })
+
+  revalidatePath('/wishlist');
+
+  if (!response.ok) {
+    throw new Error(response.error?.message || 'An error occured');
+  }
 
   return response;
 };
