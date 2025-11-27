@@ -1,4 +1,3 @@
-// middleware.ts
 import { HttpTypes } from "@medusajs/types"
 import { NextRequest, NextResponse } from "next/server"
 const BACKEND_URL = process.env.MEDUSA_BACKEND_URL
@@ -32,7 +31,6 @@ function makeAuthRedirect(
   req: NextRequest,
   locale: string,
   reason: "sessionRequired" | "sessionExpired",
-  cacheId?: string
 ) {
   const redirectUrl = new URL(`/${locale}/login`, req.url)
 
@@ -150,7 +148,6 @@ export async function middleware(request: NextRequest) {
   const urlSegment = pathname.split("/")[1]
   const looksLikeLocale = /^[a-z]{2}$/i.test(urlSegment || "")
 
-  // Get pathname without locale
   const pathnameWithoutLocale = looksLikeLocale ? pathname.replace(/^\/[^/]+/, '') : pathname
 
   const isProtectedRoute = protectedRoutes.some((route) => pathnameWithoutLocale.startsWith(route))
@@ -163,12 +160,12 @@ export async function middleware(request: NextRequest) {
 
     // Not logged in before
     if (!jwtCookie) {
-      return makeAuthRedirect(request, locale, "sessionRequired", cacheId)
+      return makeAuthRedirect(request, locale, "sessionRequired")
     }
 
     // Token exists but expired
     if (token && isTokenExpired(token)) {
-      return makeAuthRedirect(request, locale, "sessionExpired", cacheId)
+      return makeAuthRedirect(request, locale, "sessionExpired")
     }
   }
 
