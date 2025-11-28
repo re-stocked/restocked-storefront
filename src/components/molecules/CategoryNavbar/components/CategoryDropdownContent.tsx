@@ -31,7 +31,7 @@ export const CategoryDropdownContent = ({
   return (
     <div
       ref={contentRef}
-      className="overflow-y-auto py-6"
+      className="py-6"
       style={{ maxHeight }}
     >
       {children}
