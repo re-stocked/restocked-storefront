@@ -8,13 +8,13 @@ import {
 } from "react-hook-form"
 import { Button } from "@/components/atoms"
 import { zodResolver } from "@hookform/resolvers/zod"
-import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { LabeledInput } from "@/components/cells"
 import { loginFormSchema, LoginFormData } from "./schema"
 import { useState } from "react"
 import { login } from "@/lib/data/customer"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { toast } from "@/lib/helpers/toast"
 
 export const LoginForm = () => {
   const methods = useForm<LoginFormData>({
@@ -33,7 +33,7 @@ export const LoginForm = () => {
 }
 
 const Form = () => {
-  const [error, setError] = useState("")
+  const [isAuthError, setIsAuthError] = useState(false)
   const {
     handleSubmit,
     register,
@@ -48,11 +48,26 @@ const Form = () => {
 
     const res = await login(formData)
     if (res) {
-      setError(res)
+      // Temporary solution. API returns 200 code in case of auth error. To change when API is updated.
+      const isCredentialsError =
+        res.toLowerCase().includes("invalid email or password") ||
+        res.toLowerCase().includes("unauthorized") ||
+        res.toLowerCase().includes("incorrect") ||
+        res.toLowerCase().includes("credentials")
+
+      setIsAuthError(isCredentialsError)
+
+      const errorMessage = isCredentialsError ? "Incorrect email or password" : res
+
+      toast.error({ title: errorMessage || "An error occurred. Please try again." })
       return
     }
-    setError("")
+    setIsAuthError(false)
     router.push("/user")
+  }
+
+  const clearApiError = () => {
+    isAuthError && setIsAuthError(false)
   }
 
   return (
@@ -65,15 +80,25 @@ const Form = () => {
               <LabeledInput
                 label="E-mail"
                 placeholder="Your e-mail address"
-                error={errors.email as FieldError}
-                {...register("email")}
+                error={
+                  (errors.email as FieldError) ||
+                  (isAuthError ? ({ message: "" } as FieldError) : undefined)
+                }
+                {...register("email", {
+                  onChange: clearApiError,
+                })}
               />
               <LabeledInput
                 label="Password"
                 placeholder="Your password"
                 type="password"
-                error={errors.password as FieldError}
-                {...register("password")}
+                error={
+                  (errors.password as FieldError) ||
+                  (isAuthError ? ({ message: "" } as FieldError) : undefined)
+                }
+                {...register("password", {
+                  onChange: clearApiError,
+                })}
               />
             </div>
 
@@ -85,10 +110,6 @@ const Form = () => {
             <Button className="w-full uppercase mt-8" disabled={isSubmitting}>
               Log in
             </Button>
-
-            {error && (
-              <p className="label-md text-negative my-4 text-center">{error}</p>
-            )}
           </form>
         </div>
 
