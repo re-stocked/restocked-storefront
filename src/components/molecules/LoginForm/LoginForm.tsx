@@ -1,103 +1,99 @@
-"use client"
-import {
-  FieldError,
-  FieldValues,
-  FormProvider,
-  useForm,
-  useFormContext,
-} from "react-hook-form"
-import { Button } from "@/components/atoms"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { LabeledInput } from "@/components/cells"
-import { loginFormSchema, LoginFormData } from "./schema"
-import { useState } from "react"
-import { login } from "@/lib/data/customer"
-import { useRouter, useSearchParams } from "next/navigation"
-import Link from "next/link"
-import { InfoIcon } from "@/icons"
+'use client';
+
+import { useState } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { FieldError, FieldValues, FormProvider, useForm, useFormContext } from 'react-hook-form';
+
+import { Button } from '@/components/atoms';
+import { Alert } from '@/components/atoms/Alert/Alert';
+import { LabeledInput } from '@/components/cells';
+import { login } from '@/lib/data/customer';
+
+import { LoginFormData, loginFormSchema } from './schema';
 
 export const LoginForm = () => {
   const methods = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
-    },
-  })
+      email: '',
+      password: ''
+    }
+  });
 
   return (
     <FormProvider {...methods}>
       <Form />
     </FormProvider>
-  )
-}
+  );
+};
 
 const Form = () => {
-  const [error, setError] = useState("")
+  const [error, setError] = useState('');
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
-  } = useFormContext()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const sessionExpired = searchParams.get('sessionExpired')
-  const sessionRequired = searchParams.get('sessionRequired')
-
-  const authMessage =
-  sessionExpired === "true" ? "expired"
-  : sessionRequired === "true" ? "required"
-  : null
+    formState: { errors, isSubmitting }
+  } = useFormContext();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isSessionExpired = searchParams.get('sessionExpired') === 'true';
+  const isSessionRequired = searchParams.get('sessionRequired') === 'true';
 
   const submit = async (data: FieldValues) => {
-    const formData = new FormData()
-    formData.append("email", data.email)
-    formData.append("password", data.password)
+    const formData = new FormData();
+    formData.append('email', data.email);
+    formData.append('password', data.password);
 
-    const res = await login(formData)
+    const res = await login(formData);
     if (res) {
-      setError(res)
-      return
+      setError(res);
+      return;
     }
-    setError("")
-    router.push("/user")
-    
-  }
+    setError('');
+    router.push('/user');
+  };
+
+  const getAuthMessage = () => {
+    if (isSessionExpired) {
+      return 'Your session has expired. Please log in to continue.';
+    }
+    if (isSessionRequired) {
+      return 'Please log in to continue.';
+    }
+    return null;
+  };
+
+  const authMessage = getAuthMessage();
 
   return (
     <main className="container">
-      <div className="max-w-xl w-full mx-auto mt-6 space-y-4">
+      <div className="mx-auto mt-6 w-full max-w-xl space-y-4">
         {authMessage && (
-          <div className="rounded-sm border border-info bg-info-secondary p-4 flex gap-4 justify-center">
-            <InfoIcon size={24} />
-            <p className="label-md text-secondary">
-              
-              {authMessage === 'expired' && (
-              'Your session has expired. Please log in to continue.'
-
-              )}
-              {authMessage === 'required' && (
-                'Please log in to continue.'
-              )}
-            </p>
-          </div>
+          <Alert
+            title={authMessage}
+            className="w-full"
+            icon
+          />
         )}
         <div className="rounded-sm border p-4">
-          <h1 className="heading-md uppercase mb-8 text-primary">Log in</h1>
+          <h1 className="heading-md mb-8 uppercase text-primary">Log in</h1>
           <form onSubmit={handleSubmit(submit)}>
             <div className="space-y-4">
               <LabeledInput
                 label="E-mail"
                 placeholder="Your e-mail address"
                 error={errors.email as FieldError}
-                {...register("email")}
+                {...register('email')}
               />
               <LabeledInput
                 label="Password"
                 placeholder="Your password"
                 type="password"
                 error={errors.password as FieldError}
-                {...register("password")}
+                {...register('password')}
               />
             </div>
 
@@ -106,24 +102,25 @@ const Form = () => {
               Forgot your password?
             </Link> */}
 
-            <Button className="w-full uppercase mt-8" disabled={isSubmitting}>
+            <Button
+              className="mt-8 w-full uppercase"
+              disabled={isSubmitting}
+            >
               Log in
             </Button>
 
-            {error && (
-              <p className="label-md text-negative my-4 text-center">{error}</p>
-            )}
+            {error && <p className="label-md my-4 text-center text-negative">{error}</p>}
           </form>
         </div>
 
         <div className="rounded-sm border p-4">
-          <h2 className="heading-md uppercase mb-4 text-primary">
+          <h2 className="heading-md mb-4 uppercase text-primary">
             Don&apos;t have an account yet?
           </h2>
           <Link href="/register">
             <Button
               variant="tonal"
-              className="w-full flex justify-center mt-8 uppercase"
+              className="mt-8 flex w-full justify-center uppercase"
             >
               Create account
             </Button>
@@ -131,5 +128,5 @@ const Form = () => {
         </div>
       </div>
     </main>
-  )
-}
+  );
+};
