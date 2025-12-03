@@ -16,7 +16,7 @@ export const listCategories = async ({
     }>("/store/product-categories", {
       query: {
         fields:
-          "id,handle,name,rank,parent_category_id,description,*category_children, *category_children.metadata",
+          "id,handle,name,rank,metadata,parent_category_id,description,*category_children",
         include_descendants_tree: true,
         include_ancestors_tree: true,
         limit,
