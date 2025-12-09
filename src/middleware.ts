@@ -159,7 +159,6 @@ export async function middleware(request: NextRequest) {
 
   const regionMap = await getRegionMap(cacheId);
   const countryCode = regionMap && (await getCountryCode(request, regionMap));
-
   const urlHasCountryCode = countryCode && pathname.split('/')[1].includes(countryCode);
 
   // If no country code in URL but we can resolve one, redirect to locale-prefixed path

@@ -8,10 +8,8 @@ import { fetchQuery, sdk } from '../config';
 import { getAuthHeaders } from './cookies';
 
 export const getUserWishlists = async () => {
-  const authHeaders = await getAuthHeaders();
-
   const headers = {
-    ...authHeaders,
+    ...(await getAuthHeaders()),
     'Content-Type': 'application/json',
     'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string
   };
