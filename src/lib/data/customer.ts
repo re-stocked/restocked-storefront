@@ -1,5 +1,6 @@
 'use server';
 
+
 import { HttpTypes } from '@medusajs/types';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -12,35 +13,33 @@ import {
   getCartId,
   removeAuthToken,
   removeCartId,
-  setAuthToken
-} from './cookies';
+  setAuthToken,
+} from "./cookies"
 
 export const retrieveCustomer = async (): Promise<HttpTypes.StoreCustomer | null> => {
-  const authHeaders = await getAuthHeaders();
-
-  if (!authHeaders) return null;
+  const authHeaders = await getAuthHeaders()
+  if (!authHeaders) return null
 
   const headers = {
-    ...authHeaders
-  };
+      ...authHeaders,
+  }
 
   const next = {
-    ...(await getCacheOptions('customers'))
-  };
+    ...(await getCacheOptions("customers")),
+  }
 
-  return await sdk.client
-    .fetch<{ customer: HttpTypes.StoreCustomer }>(`/store/customers/me`, {
-      method: 'GET',
+  return await sdk.client.fetch<{ customer: HttpTypes.StoreCustomer }>(`/store/customers/me`, {
+      method: "GET",
       query: {
-        fields: '*orders'
+        fields: "*orders",
       },
       headers,
       next,
-      cache: 'force-cache'
+      cache: "force-cache"
     })
-    .then(({ customer }) => customer)
-    .catch(() => null);
-};
+    .then(({ customer }) => customer ?? null)
+    .catch(() => null)
+}
 
 export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
   const headers = {

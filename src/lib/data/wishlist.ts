@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { Wishlist } from '@/types/wishlist';
 
-import { sdk } from '../config';
+import { fetchQuery, sdk } from '../config';
 import { getAuthHeaders } from './cookies';
 
 export const getUserWishlists = async () => {
@@ -22,6 +22,9 @@ export const getUserWishlists = async () => {
     })
     .then(res => {
       return res;
+    })
+    .catch(() => {
+      return { wishlists: [], count: 0 };
     });
 };
 
@@ -33,21 +36,25 @@ export const addWishlistItem = async ({
   reference: 'product';
 }) => {
   const headers = {
-    ...(await getAuthHeaders()),
-    'Content-Type': 'application/json',
-    'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string
+    ...(await getAuthHeaders())
   };
 
-  const response = await fetch(`${process.env.MEDUSA_BACKEND_URL}/store/wishlist`, {
+  const response = await fetchQuery('/store/wishlist', {
     headers,
     method: 'POST',
-    body: JSON.stringify({
+    body: {
       reference,
       reference_id
-    })
-  }).then(() => {
-    revalidatePath('/wishlist');
-  });
+    }
+  })
+
+  revalidatePath('/wishlist');
+
+  if (!response.ok) {
+    throw new Error(response.error?.message || 'An error occured');
+  }
+
+  return response;
 };
 
 export const removeWishlistItem = async ({
@@ -58,18 +65,19 @@ export const removeWishlistItem = async ({
   product_id: string;
 }) => {
   const headers = {
-    ...(await getAuthHeaders()),
-    'Content-Type': 'application/json',
-    'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string
+    ...(await getAuthHeaders())
   };
 
-  const response = await fetch(
-    `${process.env.MEDUSA_BACKEND_URL}/store/wishlist/${wishlist_id}/product/${product_id}`,
-    {
-      headers,
-      method: 'DELETE'
-    }
-  ).then(() => {
-    revalidatePath('/wishlist');
-  });
+  const response = await fetchQuery(`/store/wishlist/${wishlist_id}/product/${product_id}`, {
+    headers,
+    method: 'DELETE'
+  })
+
+  revalidatePath('/wishlist');
+
+  if (!response.ok) {
+    throw new Error(response.error?.message || 'An error occured');
+  }
+
+  return response;
 };
