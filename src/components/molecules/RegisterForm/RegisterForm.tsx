@@ -44,14 +44,19 @@ const Form = () => {
     "8chars": false,
     symbolOrDigit: false,
   })
-    const {
+
+  const {
     handleSubmit,
     register,
     watch,
     formState: { errors, isSubmitting },
-  } = useFormContext()
+  } = useFormContext<RegisterFormData>()
 
-  const submit = async (data: FieldValues) => {
+  const submit = async (data: RegisterFormData) => {
+    if (!passwordError.isValid) {
+      return
+    }
+
     const formData = new FormData()
     formData.append("email", data.email)
     formData.append("password", data.password)
@@ -59,7 +64,7 @@ const Form = () => {
     formData.append("last_name", data.lastName)
     formData.append("phone", data.phone)
 
-    const res = passwordError.isValid && (await signup(formData))
+    const res = await signup(formData)
 
     if (res && !res?.id) {
 
@@ -136,7 +141,7 @@ const Form = () => {
         <h2 className="heading-md text-primary uppercase mb-8">
           Already have an account?
         </h2>
-        <Link href="/user">
+        <Link href="/login">
           <Button
             variant="tonal"
             className="w-full flex justify-center mt-8 uppercase"
