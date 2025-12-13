@@ -40,7 +40,7 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   const options = useMemo(() => {
     return regions
       ?.map((r) => {
-        return r.countries?.map((c) => ({
+        return r.countries?.map((c: any) => ({
           country: c.iso_2,
           region: r.id,
           label: c.display_name,
