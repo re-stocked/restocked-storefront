@@ -37,6 +37,11 @@ const getReviews = async () => {
 }
 
 const createReview = async (review: any) => {
+  // LOG: This will appear in Vercel logs
+  console.log("=== CREATE REVIEW CALLED ===")
+  console.log("Received:", JSON.stringify(review))
+  console.log("Is Array?", Array.isArray(review))
+  
   const headers = {
     ...(await getAuthHeaders()),
     "Content-Type": "application/json",
@@ -46,6 +51,7 @@ const createReview = async (review: any) => {
 
   // Ensure we're sending a single review object, not an array
   const reviewData = Array.isArray(review) ? review[0] : review
+  console.log("Sending:", JSON.stringify(reviewData))
 
   const response = await fetch(
     `${process.env.MEDUSA_BACKEND_URL}/store/reviews`,
