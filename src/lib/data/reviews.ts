@@ -2,7 +2,6 @@
 import { revalidatePath } from "next/cache"
 import { sdk } from "../config"
 import { getAuthHeaders } from "./cookies"
-import { retrieveCustomer } from "./customer"
 import { HttpTypes } from "@medusajs/types"
 
 export type Review = {
@@ -38,19 +37,8 @@ const getReviews = async () => {
 }
 
 const createReview = async (review: any) => {
-  // LOG: This will appear in Vercel logs
   console.log("=== CREATE REVIEW CALLED ===")
   console.log("Received:", JSON.stringify(review))
-  console.log("Is Array?", Array.isArray(review))
-  
-  // Get the authenticated customer
-  const customer = await retrieveCustomer()
-  if (!customer) {
-    console.log("ERROR: No authenticated customer found")
-    return { error: "Customer not authenticated" }
-  }
-  
-  console.log("Customer ID:", customer.id)
   
   const headers = {
     ...(await getAuthHeaders()),
@@ -62,14 +50,14 @@ const createReview = async (review: any) => {
   // Ensure we're sending a single review object, not an array
   const reviewInput = Array.isArray(review) ? review[0] : review
   
-  // Create a properly structured review payload with all required fields
+  // Create review payload according to MercurJS documentation
+  // customer_id is inferred from authentication context by the module
   const reviewData = {
     order_id: reviewInput.order_id,
     rating: reviewInput.rating,
     reference: reviewInput.reference,
     reference_id: reviewInput.reference_id,
     customer_note: reviewInput.customer_note || null,
-    customer_id: customer.id,
   }
   
   console.log("Sending:", JSON.stringify(reviewData))
