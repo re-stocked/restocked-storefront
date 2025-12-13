@@ -62,7 +62,11 @@ const createReview = async (review: any) => {
     }
   )
   
+  console.log("Backend response status:", response.status)
+  console.log("Backend response ok:", response.ok)
+  
   const result = await response.json()
+  console.log("Backend response data:", JSON.stringify(result))
   
   // Revalidate all review-related paths
   revalidatePath("/user/reviews", "page")
