@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache"
 import { sdk } from "../config"
 import { getAuthHeaders } from "./cookies"
+import { retrieveCustomer } from "./customer"
 import { HttpTypes } from "@medusajs/types"
 
 export type Review = {
@@ -42,6 +43,15 @@ const createReview = async (review: any) => {
   console.log("Received:", JSON.stringify(review))
   console.log("Is Array?", Array.isArray(review))
   
+  // Get the authenticated customer
+  const customer = await retrieveCustomer()
+  if (!customer) {
+    console.log("ERROR: No authenticated customer found")
+    return { error: "Customer not authenticated" }
+  }
+  
+  console.log("Customer ID:", customer.id)
+  
   const headers = {
     ...(await getAuthHeaders()),
     "Content-Type": "application/json",
@@ -50,7 +60,18 @@ const createReview = async (review: any) => {
   }
 
   // Ensure we're sending a single review object, not an array
-  const reviewData = Array.isArray(review) ? review[0] : review
+  const reviewInput = Array.isArray(review) ? review[0] : review
+  
+  // Create a properly structured review payload with all required fields
+  const reviewData = {
+    order_id: reviewInput.order_id,
+    rating: reviewInput.rating,
+    reference: reviewInput.reference,
+    reference_id: reviewInput.reference_id,
+    customer_note: reviewInput.customer_note || null,
+    customer_id: customer.id,
+  }
+  
   console.log("Sending:", JSON.stringify(reviewData))
 
   const response = await fetch(
