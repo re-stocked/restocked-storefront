@@ -44,20 +44,26 @@ const createReview = async (review: any) => {
       .NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY as string,
   }
 
+  // Ensure we're sending a single review object, not an array
+  const reviewData = Array.isArray(review) ? review[0] : review
+
   const response = await fetch(
     `${process.env.MEDUSA_BACKEND_URL}/store/reviews`,
     {
       headers,
       method: "POST",
-      body: JSON.stringify(review),
+      body: JSON.stringify(reviewData),
     }
-  ).then((res) => {
-    revalidatePath("/user/reviews")
-    revalidatePath("/user/reviews/written")
-    return res
-  })
-
-  return response.json()
+  )
+  
+  const result = await response.json()
+  
+  // Revalidate all review-related paths
+  revalidatePath("/user/reviews", "page")
+  revalidatePath("/user/reviews/written", "page")
+  revalidatePath("/user/orders", "page")
+  
+  return result
 }
 
 export { getReviews, createReview }
