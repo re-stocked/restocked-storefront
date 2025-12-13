@@ -55,12 +55,9 @@ const Form: React.FC<Props> = ({ handleClose, seller }) => {
       customer_note: data.opinion,
     }
 
-    console.log("Submitting review:", body)
     const response = await createReview(body)
-    console.log("Review response:", response)
 
     if (response.error) {
-      console.error("Review error:", response.error)
       setError("error")
       return
     }
