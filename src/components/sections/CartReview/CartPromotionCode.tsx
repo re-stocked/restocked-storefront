@@ -9,9 +9,7 @@ import { toast } from "@/lib/helpers/toast"
 export default function CartPromotionCode({
   cart,
 }: {
-  cart:
-    | (HttpTypes.StoreCart & { promotions?: HttpTypes.StorePromotion[] })
-    | null
+  cart: HttpTypes.StoreCart | null
 }) {
   const [promotionCode, setPromotionCode] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -27,6 +25,7 @@ export default function CartPromotionCode({
       }
       setPromotionCode("")
     } catch (err) {
+      toast.error({ title: "Error applying promo code" })
       console.log(err)
     } finally {
       setIsLoading(false)
@@ -39,7 +38,7 @@ export default function CartPromotionCode({
         level="h2"
         className="flex flex-row text-3xl-regular gap-x-2 items-baseline items-center"
       >
-        Promotion codes
+        Promotion code
       </Heading>
       <div>
         {cart?.promotions?.map((promo) => (
