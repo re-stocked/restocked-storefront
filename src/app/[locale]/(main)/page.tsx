@@ -50,8 +50,8 @@ export async function generateMetadata({
 
   const title = "Home"
   const description =
-    "Welcome to Mercur B2C Demo! Create a modern marketplace that you own and customize in every aspect with high-performance, fully customizable storefront."
-  const ogImage = "/B2C_Storefront_Open_Graph.png"
+    "The marketplace where obsolete machine parts become useful again to those who need it."
+  const ogImage = "/images/hero/image.jpg"
   const canonical = `${baseUrl}/${locale}`
 
   return {
