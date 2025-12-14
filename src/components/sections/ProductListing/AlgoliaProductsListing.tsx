@@ -45,7 +45,7 @@ export const AlgoliaProductsListing = ({
     seller_handle
       ? `NOT seller:null AND seller.handle:${seller_handle} AND `
       : "NOT seller:null AND "
-  }NOT seller.store_status:SUSPENDED AND supported_countries:${locale} AND variants.prices.currency_code:${currency_code} AND variants.prices.amount > 0${
+  }NOT seller.store_status:SUSPENDED AND supported_countries:${locale}${
     category_id
       ? ` AND categories.id:${category_id}${
           collection_id !== undefined
@@ -54,13 +54,16 @@ export const AlgoliaProductsListing = ({
         } ${facetFilters}`
       : ` ${facetFilters}`
   }`
+  
+  console.log("Algolia filters:", filters)
+  console.log("Currency code:", currency_code)
+  console.log("Locale:", locale)
+  
   return (
     <InstantSearchNext searchClient={client} indexName="products">
       <Configure
         query={query}
         filters={filters}
-        hitsPerPage={PRODUCT_LIMIT}
-        page={page - 1}
       />
       <ProductsListing
         locale={locale}
@@ -130,20 +133,23 @@ const ProductsListing = ({
 
   if (!results?.processingTimeMS) return <ProductListingSkeleton />
 
+  const page: number = +(searchParams.get("page") || 1)
   const isLoading = isLoadingProducts && items.length > 0
 
   const filteredProducts = items.filter((pr) =>
     apiProducts?.some((p) => p.id === pr.objectID)
   )
 
-  const products = filteredProducts.filter((pr) =>
-    apiProducts?.some(
-      (p) => p.id === pr.objectID && filterProductsByCurrencyCode(p)
+  const products = filteredProducts
+    .filter((pr) =>
+      apiProducts?.some(
+        (p) => p.id === pr.objectID && filterProductsByCurrencyCode(p)
+      )
     )
-  )
+    .slice((page - 1) * PRODUCT_LIMIT, page * PRODUCT_LIMIT)
 
-  const count = results?.nbHits || 0
-  const pages = results?.nbPages || 1
+  const count = filteredProducts?.length || 0
+  const pages = Math.ceil(count / PRODUCT_LIMIT) || 1
 
   function filterProductsByCurrencyCode(product: HttpTypes.StoreProduct) {
     const minPrice = searchParams.get("min_price")
